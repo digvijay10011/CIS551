@@ -12,6 +12,8 @@ class AtmClient {
 
         //somehow values from the command line arguments should br loaded
         //into the following variables which will then be passed to the bank.
+        //parse amount as a String because JsonObject doesn't have a method getDouble().
+        
         String mode = "w";
         String account = "bobby";
         String amount = "20";
