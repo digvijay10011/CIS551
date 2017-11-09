@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 class BankServer {
 
-    static HashMap<String, Double> balance = null;
+    
     static HashMap<String, Account> allAccounts = null;
     static HashMap<String, String> cardFiles = null;
 
