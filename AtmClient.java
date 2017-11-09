@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.StringReader;
 import java.net.Socket;
 import javax.json.*;
 
@@ -12,9 +13,9 @@ class AtmClient {
 
         //somehow values from the command line arguments should br loaded
         //into the following variables which will then be passed to the bank.
-        String mode = "w";
+        String mode = "n";
         String account = "bobby";
-        String amount = "20";
+        double amount = 10;
         String cardfile = account + ".card";
         int port = 3000;
         String IPaddress = "127.0.0.1";
@@ -37,13 +38,26 @@ class AtmClient {
             
             //getting response from the server. If in the response, "error" = true, then the transaction failed due to wrong inputs.
             String response = null;
-            while((response=br.readLine()) == null);
-                
-            System.out.println(response);
+            while((response=br.readLine()) == null); //waiting for server's respone
+            
+            JsonReader jsonReader = Json.createReader(new StringReader(response));
+            JsonObject responseObject = jsonReader.readObject();
+            jsonReader.close();
 
+            boolean error = responseObject.getBoolean("error");
+
+            if (error) {
+                System.exit(255);
+            } else {
+                //responseObject;
+                System.out.println(responseObject.toString());
+            }
+            
             pw.close();
             br.close();
             serverSocket.close();
+            
+            System.exit(0);
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -57,12 +57,17 @@ class BankServer {
 
                 mode = object.getString("mode").charAt(0);
                 requestedAccount = object.getString("account");
-                requestedAmount = Double.parseDouble(object.getString("amount"));
+                requestedAmount = object.getJsonNumber("amount").doubleValue();
                 requestedCardFileName = object.getString("cardfile");
                 authFile = object.getString("authFile");
                 //cardFileContent isn't being sent yet
 
                 Account account = null;
+
+                // response that will be sent to the atm so that atm can print the required message or exit if theres error
+                JsonObjectBuilder jsonBuilder = Json.createObjectBuilder().add("account", requestedAccount);
+                JsonObject response = null;
+
                 boolean error = false;
                 
                 switch (mode) {
@@ -80,6 +85,8 @@ class BankServer {
 
                         allAccounts.put(requestedAccount, account);
                         cardFiles.put(requestedCardFileName, cardFileContent);
+                        
+                        jsonBuilder.add("initial_balance", account.balance);
 
                         break;
 
@@ -102,6 +109,8 @@ class BankServer {
                         if (account.balance < 0) {
                             error = true;
                         }
+                        
+                        jsonBuilder.add("withdraw", account.balance);
 
                         break;
 
@@ -121,6 +130,7 @@ class BankServer {
 
                         account.balance += requestedAmount;
                         //what about max balance ??
+                        jsonBuilder.add("deposit", account.balance);
 
                         break;
 
@@ -136,19 +146,22 @@ class BankServer {
                         if (account.cardFileName.compareTo(requestedCardFileName) != 0 || !checkCardFiles(cardFiles.get(requestedCardFileName), cardFileContent) || requestedAmount <= 0) {
                             error = true;
                         }
+                        
+                        jsonBuilder.add("balance", account.balance);
 
                         break;
 
                 }
                 
-                JsonObject response = null;
+                
                 if(error){
-                    response = Json.createObjectBuilder().add("error", true).build();
+                    response = jsonBuilder.add("error", true).build();
                 }
                 else{
-                    response = Json.createObjectBuilder().add("error", false).add("account", requestedAccount).add("balance", Double.toString(account.balance)).build();
+                    response = jsonBuilder.add("error", false).build();
                     
                 }
+                //sending response to atm
                 pw.println(response.toString());
                 pw.flush();
                 System.out.println(response.toString());
