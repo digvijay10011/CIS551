@@ -41,10 +41,10 @@ class AtmClient {
         generateOption(options, "c", true, "card-file", false);
 
         OptionGroup optionGroup = new OptionGroup();
-        optionGroup.addOption(new Option("n", false, "new-account"));
+        optionGroup.addOption(new Option("n", true, "new-account"));
         optionGroup.addOption(new Option("d", true, "deposit"));
         optionGroup.addOption(new Option("w", true, "withdraw"));
-        optionGroup.addOption(new Option("g", true, "balance"));
+        optionGroup.addOption(new Option("g", false, "balance"));
         optionGroup.setRequired(true);
         options.addOptionGroup(optionGroup);
 
@@ -76,7 +76,6 @@ class AtmClient {
             amount = Double.valueOf(cmd.getOptionValue('w'));
         } else if (cmd.hasOption('g')) {
             mode = "g";
-            amount = Double.valueOf(cmd.getOptionValue('g'));
         } else {
             printInvalidArgs(options);
         }
