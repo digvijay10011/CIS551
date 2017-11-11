@@ -39,6 +39,8 @@ class AtmClient {
         generateOption(options, "i", true, "ip-address", false);
         generateOption(options, "p", true, "port", false);
         generateOption(options, "c", true, "card-file", false);
+        // TODO: Remove this before submitting
+        generateOption(options, "v", false, "verbose", false);
 
         OptionGroup optionGroup = new OptionGroup();
         optionGroup.addOption(new Option("n", true, "new-account"));
@@ -59,34 +61,64 @@ class AtmClient {
         } 
 
         String account = cmd.getOptionValue('a');
+        if (!Validator.validateAccountName(account)) {
+            printInvalidArgs(options);
+        }
         String authFile = getOptionValue(cmd, 's', "bank.auth");
+        if (!Validator.validateFileName(authFile)) {
+            printInvalidArgs(options);
+        }
         String ipAddress = getOptionValue(cmd, 'i', "127.0.0.1");
+        if (!Validator.validateIPAddress(ipAddress)) {
+            printInvalidArgs(options);
+        }
         int port = Integer.valueOf(getOptionValue(cmd, 'p', "3000"));
+        if (port < 1024 || port > 65535) {
+            printInvalidArgs(options);
+        }
         String cardFile = getOptionValue(cmd, 'c', account + ".card");
+        if (!Validator.validateFileName(cardFile)) {
+            printInvalidArgs(options);
+        }
         String mode = "";
         double amount = 0;
+        boolean logging = cmd.hasOption('v');
         if (cmd.hasOption('n')) {
             mode = "n";
-            amount = Double.valueOf(cmd.getOptionValue('n'));
+            String num = cmd.getOptionValue('n');
+            if (!Validator.validateNumber(num)) {
+                printInvalidArgs(options);
+            }
+            amount = Double.valueOf(num);
         } else if (cmd.hasOption('d')) {
             mode = "d";
-            amount = Double.valueOf(cmd.getOptionValue('d'));
+            String num = cmd.getOptionValue('d');
+            if (!Validator.validateNumber(num)) {
+                printInvalidArgs(options);
+            }
+            amount = Double.valueOf(num);
         } else if (cmd.hasOption('w')) {
             mode = "w";
-            amount = Double.valueOf(cmd.getOptionValue('w'));
+            String num = cmd.getOptionValue('w');
+            if (!Validator.validateNumber(num)) {
+                printInvalidArgs(options);
+            }
+            amount = Double.valueOf(num);
         } else if (cmd.hasOption('g')) {
             mode = "g";
         } else {
             printInvalidArgs(options);
         }
 
-        System.out.println(account);
-        System.out.println(authFile);
-        System.out.println(ipAddress);
-        System.out.println(port);
-        System.out.println(cardFile);
-        System.out.println(mode);
-        System.out.println(amount);
+        if (logging) {
+            System.out.println(account);
+            System.out.println(authFile);
+            System.out.println(ipAddress);
+            System.out.println(port);
+            System.out.println(cardFile);
+            System.out.println(mode);
+            System.out.println(amount);
+        }
 
         JsonObject value = Json.createObjectBuilder().add("mode", mode).add("account", account).add("amount", amount).add("cardfile", cardFile).add("port", port).add("IPaddress", authFile).add("authFile", authFile).build();
 
