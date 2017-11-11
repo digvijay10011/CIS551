@@ -1,5 +1,5 @@
-
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -7,6 +7,8 @@ import java.io.StringReader;
 import java.net.Socket;
 import org.apache.commons.cli.*;
 import javax.json.*;
+import javax.net.ssl.*;
+import java.security.*;
 
 class AtmClient {
 
@@ -122,12 +124,55 @@ class AtmClient {
 
         JsonObject value = Json.createObjectBuilder().add("mode", mode).add("account", account).add("amount", amount).add("cardfile", cardFile).add("port", port).add("IPaddress", authFile).add("authFile", authFile).build();
 
-        Socket serverSocket = null;
+        SSLSocketFactory ssf = null;
+        SSLSocket serverSocket = null;
         PrintWriter pw = null;
         BufferedReader br; 
+
+        SSLContext sslContext = null;
+        KeyStore clientKeyStore;
+        KeyStore serverKeyStore;
+        String passphrase = "correcthorsebatterystaple";
+        SecureRandom secureRandom;
+        String[] protocol = { "TLSv1.2" };
+        String[] suites = {"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256"};
+
+        // setup random
+        secureRandom = new SecureRandom();
+        secureRandom.nextInt();
+        try {
+          // setup server key store 
+          serverKeyStore = KeyStore.getInstance("JKS");
+          serverKeyStore.load( new FileInputStream(authFile),
+              passphrase.toCharArray() );
+          // and client key store
+          clientKeyStore = KeyStore.getInstance("JKS");
+          clientKeyStore.load( new FileInputStream(authFile),
+              passphrase.toCharArray() );
+          // and ssl context
+          TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+
+          tmf.init( serverKeyStore);
+
+          KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+          kmf.init( clientKeyStore, passphrase.toCharArray() );
+
+          sslContext = SSLContext.getInstance("TLS");
+          sslContext.init(kmf.getKeyManagers(),
+              tmf.getTrustManagers(),
+              secureRandom );
+        } catch (GeneralSecurityException gse) {
+          //TODO
+        }
         
         try {
-            serverSocket = new Socket(authFile, port);
+          ssf = sslContext.getSocketFactory();
+          serverSocket = (SSLSocket)ssf.createSocket(ipAddress, port);
+
+          // require TLS 1.2
+          serverSocket.setEnabledProtocols(protocol);
+          // and require TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+          serverSocket.setEnabledCipherSuites(suites);
             pw = new PrintWriter(serverSocket.getOutputStream());
             br = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
             
