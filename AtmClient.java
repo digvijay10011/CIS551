@@ -4,7 +4,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.commons.cli.*;
 import javax.json.*;
 
@@ -120,26 +128,41 @@ class AtmClient {
             System.out.println(amount);
         }
 
-        JsonObject value = Json.createObjectBuilder().add("mode", mode).add("account", account).add("amount", amount).add("cardfile", cardFile).add("port", port).add("IPaddress", authFile).add("authFile", authFile).build();
+        JsonObject value = Json.createObjectBuilder().add("mode", mode)
+                            .add("account", account).add("amount", amount)
+                            .add("cardfile", cardFile).add("port", port)
+                            .add("IPaddress", authFile)
+                            .add("authFile", authFile).build();
 
-        Socket serverSocket = null;
-        PrintWriter pw = null;
-        BufferedReader br; 
-        
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<String> future = null;
         try {
-            serverSocket = new Socket(authFile, port);
-            pw = new PrintWriter(serverSocket.getOutputStream());
-            br = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-            
-            //passing the json object as string
-            pw.println(value.toString());
-            pw.flush();
-            
-            //getting response from the server. If in the response, "error" = true, then the transaction failed due to wrong inputs.
-            String response = null;
-            while((response=br.readLine()) == null); //waiting for server's respone
-            
-            JsonReader jsonReader = Json.createReader(new StringReader(response));
+            final Socket serverSocket = new Socket(ipAddress, port);
+            final PrintWriter pw = new PrintWriter(
+                                    serverSocket.getOutputStream());
+            final BufferedReader br = new BufferedReader(
+                                        new InputStreamReader(
+                                            serverSocket.getInputStream()));
+            future = executor.submit(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    //passing the json object as string
+                    pw.println(value.toString());
+                    pw.flush();
+                    
+                    //getting response from the server.
+                    //If in the response, "error" = true, then
+                    //the transaction failed due to wrong inputs.
+                    String response = null;
+                    //waiting for server's respone
+                    while((response=br.readLine()) == null);
+                    return response;
+                }
+            });
+
+            String response = future.get(10, TimeUnit.SECONDS);
+            JsonReader jsonReader = Json.createReader(
+                                                    new StringReader(response));
             JsonObject responseObject = jsonReader.readObject();
             jsonReader.close();
 
@@ -151,18 +174,22 @@ class AtmClient {
                 //responseObject;
                 System.out.println(responseObject.toString());
             }
-            
+
             pw.close();
             br.close();
             serverSocket.close();
-            
-            System.exit(0);
 
+    
+        } catch (TimeoutException e) {
+            future.cancel(true);
+            System.exit(63);
+        } catch (ConnectException e) {
+            System.exit(63);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-
         }
 
+        executor.shutdownNow();
+        System.exit(0);
     }
 }
