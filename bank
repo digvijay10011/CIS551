@@ -1,2 +1,2 @@
-javac -cp javax.json-1.1.jar: BankServer.java
-java -cp javax.json-1.1.jar: BankServer 
+javac -cp .:javax.json-1.1.jar:commons-cli-1.4.jar BankServer.java
+java -cp .:javax.json-1.1.jar:commons-cli-1.4.jar BankServer

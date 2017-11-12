@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.cli.*;
+
 class BankServer {
 
     
@@ -24,13 +26,39 @@ class BankServer {
         cardFiles = new HashMap<String, String>();   //we will need a separate HashMap for cardFiles !
                                                     // because we need to check if cardFileName is duplicated or not.
 
+        Options options = new Options();
+        
+        ArgumentParser.generateOption(options, "s", true, "auth-file", false);
+        ArgumentParser.generateOption(options, "p", true, "account", false);
+        // TODO: Remove this before submitting
+        ArgumentParser.generateOption(options, "v", false, "verbose", false);
+
+        CommandLineParser parser = new DefaultParser();
+        CommandLine cmd = null;
+
+        try {
+            cmd = parser.parse(options, args);
+        } catch (Exception e) {
+            // System.out.println(e.getMessage());
+            ArgumentParser.printInvalidArgs(options);
+        }
+
+        String authFile = ArgumentParser.getOptionValue(cmd, 's', "bank.auth");
+        if (!Validator.validateFileName(authFile)) {
+            ArgumentParser.printInvalidArgs(options);
+        }
+        int port = Integer.valueOf(ArgumentParser.getOptionValue(cmd, 'p', "3000"));
+        if (port < 1024 || port > 65535) {
+            ArgumentParser.printInvalidArgs(options);
+        }
+
         char mode ='n';
         String requestedAccount = "";
         double requestedAmount = 0.0;
         String requestedCardFileName ="";
-        int port = 3000;
-        String authFile = "";
         String cardFileContent = "";
+        System.out.println(authFile);
+        System.out.println(port);
 
         ServerSocket server = null;
         Socket clientSocket = null;
@@ -39,6 +67,7 @@ class BankServer {
             server = new ServerSocket(port);
         } catch (IOException ex) {
             //handle it !!!!!
+            System.exit(63);
         }
         
         while (true) {
