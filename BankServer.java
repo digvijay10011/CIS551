@@ -18,12 +18,12 @@ class BankServer {
 
     
     static HashMap<String, Account> allAccounts = null;
-    static HashMap<String, String> cardFiles = null;
+    //static HashMap<String, String> cardFiles = null;
 
     public static void main(String[] args) {
 
         allAccounts = new HashMap<String, Account>();
-        cardFiles = new HashMap<String, String>();   //we will need a separate HashMap for cardFiles !
+        //cardFiles = new HashMap<String, String>();   //we will need a separate HashMap for cardFiles !
                                                     // because we need to check if cardFileName is duplicated or not.
 
         char mode ='n';
@@ -116,7 +116,7 @@ class BankServer {
                 requestedAmount = object.getJsonNumber("amount").doubleValue();
                 requestedCardFileName = object.getString("cardfile");
                 authFile = object.getString("authFile");
-                //cardFileContent isn't being sent yet
+                cardFileContent = object.getString("cardFileContent");
 
                 Account account = null;
 
@@ -130,7 +130,7 @@ class BankServer {
 
                     case 'n':   //new account
 
-                        if (allAccounts.get(requestedAccount) != null || requestedAmount < 10 || cardFiles.get(requestedCardFileName) != null) {
+                        if (allAccounts.get(requestedAccount) != null || requestedAmount < 10 ) {
                             error = true;
                             break;
                         }
@@ -138,9 +138,10 @@ class BankServer {
                         account = new Account();
                         account.balance = requestedAmount;
                         account.cardFileName = requestedCardFileName;
+                        account.cardFileContent = cardFileContent;
 
                         allAccounts.put(requestedAccount, account);
-                        cardFiles.put(requestedCardFileName, cardFileContent);
+                        //cardFiles.put(requestedCardFileName, cardFileContent);
                         
                         jsonBuilder.add("initial_balance", account.balance);
 
@@ -155,7 +156,7 @@ class BankServer {
                             break;
                         }
 
-                        if (account.cardFileName.compareTo(requestedCardFileName) != 0 || !checkCardFiles(cardFiles.get(requestedCardFileName), cardFileContent) || requestedAmount <= 0) {
+                        if (account.cardFileName.compareTo(requestedCardFileName) != 0 || !checkCardFiles(account.cardFileContent, cardFileContent) || requestedAmount <= 0) {
                             error = true;
                             break;
                         }
@@ -179,7 +180,7 @@ class BankServer {
                             break;
                         }
 
-                        if (account.cardFileName.compareTo(requestedCardFileName) != 0 || !checkCardFiles(cardFiles.get(requestedCardFileName), cardFileContent) || requestedAmount <= 0) {
+                        if (account.cardFileName.compareTo(requestedCardFileName) != 0 || !checkCardFiles(account.cardFileContent, cardFileContent) || requestedAmount <= 0) {
                             error = true;
                             break;
                         }
@@ -199,7 +200,7 @@ class BankServer {
                             break;
                         }
 
-                        if (account.cardFileName.compareTo(requestedCardFileName) != 0 || !checkCardFiles(cardFiles.get(requestedCardFileName), cardFileContent) || requestedAmount <= 0) {
+                        if (account.cardFileName.compareTo(requestedCardFileName) != 0 || !checkCardFiles(account.cardFileContent, cardFileContent) || requestedAmount <= 0) {
                             error = true;
                         }
                         
@@ -235,10 +236,7 @@ class BankServer {
     }
 
     static boolean checkCardFiles(String actual, String current) {
-
-        //code to check the cardfiles
-        // return true if cardfiles match
-        return true;
+         return actual.equals(current);
     }
 
 }
@@ -247,5 +245,6 @@ class Account {
 
     double balance;
     String cardFileName;
+    String cardFileContent;
 
 }

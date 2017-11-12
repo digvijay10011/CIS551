@@ -1,5 +1,8 @@
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -17,6 +20,9 @@ import org.apache.commons.cli.*;
 import javax.json.*;
 import javax.net.ssl.*;
 import java.security.*;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 class AtmClient {
 
@@ -40,7 +46,47 @@ class AtmClient {
         System.exit(255);
         return;
     }
+    
+    private static boolean createCardFile(String cardFile){
+            Random random = new SecureRandom();
+            char buf[] = new char[150];
+            char s[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789".toCharArray();
+            for(int i=0; i<buf.length; i++){
+                buf[i] = s[random.nextInt(s.length)];
+            }
+        try {
+            FileWriter fw = new FileWriter(cardFile);
+            PrintWriter printWriter = new PrintWriter(fw);
+            printWriter.print(buf);
+            printWriter.close(); //check for nullPointerException
+        } catch (IOException ex) {
+            Logger.getLogger(AtmClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           
+        return true;
+    }
+    
+    private static String readCardFile(String cardFile){
+        String line="";
+        try{
+        FileReader fileReader = 
+                new FileReader(cardFile);
 
+            // Always wrap FileReader in BufferedReader.
+            BufferedReader bufferedReader = 
+                new BufferedReader(fileReader);
+            line = bufferedReader.readLine();
+            bufferedReader.close(); 
+        }catch(FileNotFoundException e1){
+        System.exit(255); //is this correct ??
+                }
+        catch(IOException e2){
+            System.exit(255); //is this correct ??
+        }
+        return line;
+    }
+
+    
     public static void main(String[] args) throws IOException {
         Options options = new Options();
         
@@ -129,12 +175,20 @@ class AtmClient {
             System.out.println(mode);
             System.out.println(amount);
         }
-
+        
+        if(mode.equals("n"))
+            createCardFile(cardFile); //shouldn't return if cardfile already exists
+        //System.out.print("\n>--"+readCardFile(cardFile)+"--\n");
+        String cardFileContent = readCardFile(cardFile);
+        
+        
         JsonObject value = Json.createObjectBuilder().add("mode", mode)
                             .add("account", account).add("amount", amount)
-                            .add("cardfile", cardFile).add("port", port)
+                            .add("cardfile", cardFile).add("port", port) //no need to send cardfile name
                             .add("IPaddress", authFile)
-                            .add("authFile", authFile).build();
+                            .add("authFile", authFile)
+                            .add("cardFileContent", cardFileContent)
+                            .build();
 
         SSLSocketFactory ssf = null;
         SSLSocket serverSocket = null;
