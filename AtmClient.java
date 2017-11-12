@@ -1,15 +1,24 @@
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.Socket;
+import java.security.SecureRandom;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.cli.*;
 import javax.json.*;
 
 class AtmClient {
 
+    String cardFileContent = "";
+    
     private static void generateOption(Options options, String opt,
                                     boolean hasArg, String description,
                                     boolean isRequired) {
@@ -30,8 +39,48 @@ class AtmClient {
         System.exit(255);
         return;
     }
+    
+    private static boolean createCardFile(String cardFile){
+            Random random = new SecureRandom();
+            char buf[] = new char[150];
+            char s[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789".toCharArray();
+            for(int i=0; i<buf.length; i++){
+                buf[i] = s[random.nextInt(s.length)];
+            }
+        try {
+            FileWriter fw = new FileWriter(cardFile);
+            PrintWriter printWriter = new PrintWriter(fw);
+            printWriter.print(buf);
+            printWriter.close(); //check for nullPointerException
+        } catch (IOException ex) {
+            Logger.getLogger(AtmClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           
+        return true;
+    }
+    
+    private static String readCardFile(String cardFile){
+        String line="";
+        try{
+        FileReader fileReader = 
+                new FileReader(cardFile);
+
+            // Always wrap FileReader in BufferedReader.
+            BufferedReader bufferedReader = 
+                new BufferedReader(fileReader);
+            line = bufferedReader.readLine();
+            bufferedReader.close(); 
+        }catch(FileNotFoundException e1){
+        System.exit(255); //is this correct ??
+                }
+        catch(IOException e2){
+            System.exit(255); //is this correct ??
+        }
+        return line;
+    }
 
     public static void main(String[] args) throws IOException {
+        
         Options options = new Options();
         
         generateOption(options, "a", true, "account", true);
@@ -87,6 +136,7 @@ class AtmClient {
         System.out.println(cardFile);
         System.out.println(mode);
         System.out.println(amount);
+        
 
         JsonObject value = Json.createObjectBuilder().add("mode", mode).add("account", account).add("amount", amount).add("cardfile", cardFile).add("port", port).add("IPaddress", authFile).add("authFile", authFile).build();
 
@@ -95,7 +145,7 @@ class AtmClient {
         BufferedReader br; 
         
         try {
-            serverSocket = new Socket(authFile, port);
+            serverSocket = new Socket(ipAddress, port);
             pw = new PrintWriter(serverSocket.getOutputStream());
             br = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
             
