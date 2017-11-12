@@ -1,5 +1,9 @@
-
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -15,8 +19,58 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.commons.cli.*;
 import javax.json.*;
+import javax.net.ssl.*;
+import java.security.*;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 class AtmClient {
+
+    private static boolean createCardFile(String cardFile){
+            File f = new File(cardFile);
+            if(f.exists()){
+                System.exit(255);
+            }
+            Random random = new SecureRandom();
+            char buf[] = new char[150];
+            char s[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789".toCharArray();
+            for(int i=0; i<buf.length; i++){
+                buf[i] = s[random.nextInt(s.length)];
+            }
+        try {
+            FileWriter fw = new FileWriter(cardFile);
+            PrintWriter printWriter = new PrintWriter(fw);
+            printWriter.print(buf);
+            printWriter.close(); //check for nullPointerException
+        } catch (IOException ex) {
+            Logger.getLogger(AtmClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           
+        return true;
+    }
+    
+    private static String readCardFile(String cardFile){
+        String line="";
+        try{
+        FileReader fileReader = 
+                new FileReader(cardFile);
+
+            // Always wrap FileReader in BufferedReader.
+            BufferedReader bufferedReader = 
+                new BufferedReader(fileReader);
+            line = bufferedReader.readLine();
+            bufferedReader.close(); 
+        }catch(FileNotFoundException e1){
+        System.exit(255); //is this correct ??
+                }
+        catch(IOException e2){
+            System.exit(255); //is this correct ??
+        }
+        return line;
+    }
+
+    
     public static void main(String[] args) throws IOException {
         Options options = new Options();
         
@@ -105,17 +159,75 @@ class AtmClient {
             System.out.println(mode);
             System.out.println(amount);
         }
-
+        
+        if(mode.equals("n")){
+            if(amount < 10)
+                System.exit(255);
+            createCardFile(cardFile);
+        }//shouldn't return if cardfile already exists
+        //System.out.print("\n>--"+readCardFile(cardFile)+"--\n");
+        String cardFileContent = readCardFile(cardFile);
+        
+        
         JsonObject value = Json.createObjectBuilder().add("mode", mode)
                             .add("account", account).add("amount", amount)
-                            .add("cardfile", cardFile).add("port", port)
+                            .add("cardfile", cardFile).add("port", port) //no need to send cardfile name
                             .add("IPaddress", authFile)
-                            .add("authFile", authFile).build();
+                            .add("authFile", authFile)
+                            .add("cardFileContent", cardFileContent)
+                            .build();
 
+        SSLSocketFactory ssf = null;
+        SSLSocket serverSocket = null;
+
+        SSLContext sslContext = null;
+        KeyStore clientKeyStore;
+        KeyStore serverKeyStore;
+        String passphrase = "correcthorsebatterystaple";
+        SecureRandom secureRandom;
+        String[] protocol = { "TLSv1.2" };
+        String[] suites = {"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256"};
+
+        // setup random
+        secureRandom = new SecureRandom();
+        secureRandom.nextInt();
+        try {
+          // setup server key store 
+          serverKeyStore = KeyStore.getInstance("JKS");
+          serverKeyStore.load( new FileInputStream(authFile),
+              passphrase.toCharArray() );
+          // and client key store
+          clientKeyStore = KeyStore.getInstance("JKS");
+          clientKeyStore.load( new FileInputStream(authFile),
+              passphrase.toCharArray() );
+          // and ssl context
+          TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+
+          tmf.init( serverKeyStore);
+
+          KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+          kmf.init( clientKeyStore, passphrase.toCharArray() );
+
+          sslContext = SSLContext.getInstance("TLS");
+          sslContext.init(kmf.getKeyManagers(),
+              tmf.getTrustManagers(),
+              secureRandom );
+        } catch (GeneralSecurityException gse) {
+          //TODO
+        }
+        
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Future<String> future = null;
         try {
-            final Socket serverSocket = new Socket(ipAddress, port);
+          ssf = sslContext.getSocketFactory();
+          serverSocket = (SSLSocket)ssf.createSocket(ipAddress, port);
+
+          // require TLS 1.2
+          serverSocket.setEnabledProtocols(protocol);
+          // and require TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+          serverSocket.setEnabledCipherSuites(suites);
+            
+            
             final PrintWriter pw = new PrintWriter(
                                     serverSocket.getOutputStream());
             final BufferedReader br = new BufferedReader(
@@ -139,6 +251,7 @@ class AtmClient {
             });
 
             String response = future.get(10, TimeUnit.SECONDS);
+            
             JsonReader jsonReader = Json.createReader(
                                                     new StringReader(response));
             JsonObject responseObject = jsonReader.readObject();
@@ -150,7 +263,9 @@ class AtmClient {
                 System.exit(255);
             } else {
                 //responseObject;
-                System.out.println(responseObject.toString());
+                
+                //Json.createObjectBuilder(responseObject).remove("error").build().toString();
+                System.out.println(Json.createObjectBuilder(responseObject).remove("error").build().toString());
             }
 
             pw.close();
