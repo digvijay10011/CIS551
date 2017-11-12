@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -48,6 +49,10 @@ class AtmClient {
     }
     
     private static boolean createCardFile(String cardFile){
+            File f = new File(cardFile);
+            if(f.exists()){
+                System.exit(255);
+            }
             Random random = new SecureRandom();
             char buf[] = new char[150];
             char s[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789".toCharArray();
@@ -176,8 +181,11 @@ class AtmClient {
             System.out.println(amount);
         }
         
-        if(mode.equals("n"))
-            createCardFile(cardFile); //shouldn't return if cardfile already exists
+        if(mode.equals("n")){
+            if(amount < 10)
+                System.exit(255);
+            createCardFile(cardFile);
+        }//shouldn't return if cardfile already exists
         //System.out.print("\n>--"+readCardFile(cardFile)+"--\n");
         String cardFileContent = readCardFile(cardFile);
         
@@ -264,6 +272,7 @@ class AtmClient {
             });
 
             String response = future.get(10, TimeUnit.SECONDS);
+            
             JsonReader jsonReader = Json.createReader(
                                                     new StringReader(response));
             JsonObject responseObject = jsonReader.readObject();
@@ -275,7 +284,9 @@ class AtmClient {
                 System.exit(255);
             } else {
                 //responseObject;
-                System.out.println(responseObject.toString());
+                
+                //Json.createObjectBuilder(responseObject).remove("error").build().toString();
+                System.out.println(Json.createObjectBuilder(responseObject).remove("error").build().toString());
             }
 
             pw.close();

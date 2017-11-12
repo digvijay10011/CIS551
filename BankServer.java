@@ -143,7 +143,7 @@ class BankServer {
                         allAccounts.put(requestedAccount, account);
                         //cardFiles.put(requestedCardFileName, cardFileContent);
                         
-                        jsonBuilder.add("initial_balance", account.balance);
+                        jsonBuilder.add("initial_balance", requestedAmount);
 
                         break;
 
@@ -161,13 +161,13 @@ class BankServer {
                             break;
                         }
 
-                        account.balance -= requestedAmount;
-
-                        if (account.balance < 0) {
+                        if (account.balance-requestedAmount < 0) {
                             error = true;
+                            break;
                         }
+                        account.balance -= requestedAmount;
                         
-                        jsonBuilder.add("withdraw", account.balance);
+                        jsonBuilder.add("withdraw", requestedAmount);
 
                         break;
 
@@ -187,7 +187,7 @@ class BankServer {
 
                         account.balance += requestedAmount;
                         //what about max balance ??
-                        jsonBuilder.add("deposit", account.balance);
+                        jsonBuilder.add("deposit", requestedAmount);
 
                         break;
 
@@ -200,7 +200,7 @@ class BankServer {
                             break;
                         }
 
-                        if (account.cardFileName.compareTo(requestedCardFileName) != 0 || !checkCardFiles(account.cardFileContent, cardFileContent) || requestedAmount <= 0) {
+                        if (account.cardFileName.compareTo(requestedCardFileName) != 0 || !checkCardFiles(account.cardFileContent, cardFileContent) ) {
                             error = true;
                         }
                         
@@ -216,12 +216,15 @@ class BankServer {
                 }
                 else{
                     response = jsonBuilder.add("error", false).build();
+                    System.out.println(Json.createObjectBuilder(response).remove("error").build().toString());
                     
                 }
                 //sending response to atm
+                
                 pw.println(response.toString());
                 pw.flush();
-                System.out.println(response.toString());
+                
+                
 
                 br.close();
                 pw.close();
