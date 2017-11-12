@@ -1,16 +1,18 @@
-
 import javax.json.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.net.ssl.*;
+import java.security.*;
 
 class BankServer {
 
@@ -29,20 +31,74 @@ class BankServer {
         double requestedAmount = 0.0;
         String requestedCardFileName ="";
         int port = 3000;
-        String authFile = "";
+        String authFile = "bank.auth";
         String cardFileContent = "";
+        SSLContext sslContext;
+        KeyStore clientKeyStore;
+        KeyStore serverKeyStore;
+        String passphrase = "correcthorsebatterystaple";
+        SecureRandom secureRandom;
+        String[] protocol = {"TLSv1.2"};
+        String[] suites = {"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256"};
+        SSLServerSocket server = null;
 
-        ServerSocket server = null;
-        Socket clientSocket = null;
-        
+        // setup random
+        secureRandom = new SecureRandom();
+        secureRandom.nextInt();
+
+        // First Create the keystore with filename of input, default bank.auth
+        Process proc = null;
+        String command = "bash key.sh " + authFile + " " + passphrase;
         try {
-            server = new ServerSocket(port);
+          proc = Runtime.getRuntime().exec(command);
+        } catch (IOException e) {
+          // TODO: handling
+        }
+
+        // wait for it to finish
+        try {
+          proc.waitFor();
+        } catch (InterruptedException e) {
+          //TODO: handling
+        }
+
+        // setup keystores
+        try {
+          // setup Client Key Store
+          clientKeyStore = KeyStore.getInstance("JKS");
+          clientKeyStore.load(new FileInputStream(authFile), passphrase.toCharArray());
+          // setup Server Key Store
+          serverKeyStore = KeyStore.getInstance("JKS");
+          serverKeyStore.load(new FileInputStream(authFile), passphrase.toCharArray());
+          // setup SSL context
+          TrustManagerFactory tmf = TrustManagerFactory.getInstance( "SunX509" );
+          tmf.init( clientKeyStore );
+          KeyManagerFactory kmf = KeyManagerFactory.getInstance( "SunX509" );
+          kmf.init( serverKeyStore, passphrase.toCharArray() );
+
+          sslContext = SSLContext.getInstance( "TLS" );
+          sslContext.init( kmf.getKeyManagers(),
+              tmf.getTrustManagers(),
+              secureRandom );
+          SSLServerSocketFactory ssf = sslContext.getServerSocketFactory();
+          server = (SSLServerSocket)ssf.createServerSocket(port);
+          // require client authorization
+          server.setNeedClientAuth(true);
+          // require TLSv1.2
+          server.setEnabledProtocols(protocol);
+          // and TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+          server.setEnabledCipherSuites(suites);
+
+        
+        } catch (GeneralSecurityException gse) {
+          // TODO: handling
         } catch (IOException ex) {
             //handle it !!!!!
         }
         
         while (true) {
             try {
+                Socket clientSocket = null;
                 
                 clientSocket = server.accept();
                 
