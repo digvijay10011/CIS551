@@ -59,8 +59,6 @@ class BankServer {
         double requestedAmount = 0.0;
         String requestedCardFileName ="";
         String cardFileContent = "";
-        System.out.println(authFile);
-        System.out.println(port);
         SSLContext sslContext;
         KeyStore clientKeyStore;
         KeyStore serverKeyStore;
