@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.net.ServerSocket;
@@ -73,8 +74,14 @@ class BankServer {
         secureRandom.nextInt();
 
         // First Create the keystore with filename of input, default bank.auth
+        // check if already exists and exit if it does
+        File af = new File(authFile);
+        if (af.exists()) {
+          System.err.println("Error: authfile: " + authFile + "  already exists, exiting...");
+          System.exit(255);
+        }
         Process proc = null;
-        String command = "bash key.sh " + authFile + " " + passphrase;
+        String command = "sh key.sh " + authFile + " " + passphrase;
         try {
           proc = Runtime.getRuntime().exec(command);
         } catch (IOException e) {
@@ -87,6 +94,7 @@ class BankServer {
         } catch (InterruptedException e) {
           //TODO: handling
         }
+        System.out.println("created");
 
         // setup keystores
         try {
