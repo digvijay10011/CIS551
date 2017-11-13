@@ -213,7 +213,7 @@ class AtmClient {
               tmf.getTrustManagers(),
               secureRandom );
         } catch (GeneralSecurityException gse) {
-          //TODO
+            System.exit(255);
         }
         
         ExecutorService executor = Executors.newSingleThreadExecutor();
