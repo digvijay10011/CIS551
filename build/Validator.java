@@ -34,10 +34,18 @@ class Validator {
             return false;
         }
 
-        for (int i = 0; i < 4; i++) {
-            if (!validateNumber(parts[i])) {
-                return false;
+        try {
+            for (int i = 0; i < 4; i++) {
+                if (!validateNumber(parts[i])) {
+                    return false;
+                }
+                int part = Integer.valueOf(parts[i]);
+                if (part < 0 || part > 255) {
+                    return false;
+                }
             }
+        } catch(NumberFormatException e) {
+            return false;
         }
 
         return true;

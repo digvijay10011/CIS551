@@ -11,6 +11,10 @@ class ArgumentParser {
 
     static String getOptionValue(CommandLine cmd, char opt, String def){
         if (cmd.hasOption(opt)) {
+            String[] vals = cmd.getOptionValues(opt);
+            if (vals.length > 1) {
+                System.exit(255);
+            }
             return cmd.getOptionValue(opt);
         }
         return def;

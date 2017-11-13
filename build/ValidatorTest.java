@@ -160,4 +160,9 @@ public class ValidatorTest {
     public void testIPNonNum() {
         assertFalse(Validator.validateIPAddress("50.22b.89.-22"));
     }
+
+    @Test
+    public void testIPOutofRange() {
+        assertFalse(Validator.validateIPAddress("50.22.2289.-22"));
+    }
 }
