@@ -1,8 +1,10 @@
-all: AtmClient.class BankServer.class Validator.class ArgumentParser.class
+all: AtmClient.class BankServer.class Validator.class ArgumentParser.class atm bank
 
-atm: AtmClient.class
+atm: AtmClient.class atm
+	chmod +x atm
 
 bank: BankServer.class
+	chmod +x bank
 
 test: ValidatorTest.class Validator.class
 	java -cp .:junit-4.12.jar:hamcrest-core-1.3.jar org.junit.runner.JUnitCore ValidatorTest
