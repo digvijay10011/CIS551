@@ -1,6 +1,6 @@
 all: AtmClient.class BankServer.class Validator.class ArgumentParser.class atm bank
 
-atm: AtmClient.class atm
+atm: AtmClient.class
 	chmod +x atm
 
 bank: BankServer.class
