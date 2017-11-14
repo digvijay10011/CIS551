@@ -75,6 +75,7 @@ class BankServer {
 
         // First Create the keystore with filename of input, default bank.auth
         // check if already exists and exit if it does
+        /*
         File af = new File(authFile);
         if (af.exists()) {
           System.err.println("Error: authfile: " + authFile + "  already exists, exiting...");
@@ -94,6 +95,7 @@ class BankServer {
         } catch (InterruptedException e) {
           //TODO: handling
         }
+        */
         System.out.println("created\n");
         System.out.flush();
 
