@@ -160,6 +160,20 @@ class AtmClient {
             System.out.println(amount);
         }
         
+        String cardFileContent = "";
+        boolean cardFileCreated = false;
+           
+            if(mode.equals("n")){
+            if(amount < 10)
+                System.exit(255);
+            createCardFile(cardFile);
+            cardFileCreated = true;
+        }//shouldn't return if cardfile already exists
+        //System.out.print("\n>--"+readCardFile(cardFile)+"--\n");
+        
+        
+        cardFileContent = readCardFile(cardFile);
+        
         
         SSLSocketFactory ssf = null;
         SSLSocket serverSocket = null;
@@ -197,6 +211,11 @@ class AtmClient {
               tmf.getTrustManagers(),
               secureRandom );
         } catch (GeneralSecurityException gse) {
+            if(cardFileCreated){
+                    File f = new File(cardFile);
+                    if(f.exists())
+                        System.err.println(f.delete());
+                }
             System.exit(255);
         }
         
@@ -211,16 +230,7 @@ class AtmClient {
           // and require TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
           serverSocket.setEnabledCipherSuites(suites);
             
-            
-            if(mode.equals("n")){
-            if(amount < 10)
-                System.exit(255);
-            createCardFile(cardFile);
-        }//shouldn't return if cardfile already exists
-        //System.out.print("\n>--"+readCardFile(cardFile)+"--\n");
-        
-        String cardFileContent = readCardFile(cardFile);
-        
+         
         
         JsonObject value = Json.createObjectBuilder().add("mode", mode)
                             .add("account", account).add("amount", amount)
@@ -264,6 +274,11 @@ class AtmClient {
             boolean error = responseObject.getBoolean("error");
 
             if (error) {
+                if(cardFileCreated){
+                    File f = new File(cardFile);
+                    if(f.exists())
+                        System.err.println(f.delete());
+                }
                 System.exit(255);
             } else {
                 //responseObject;
@@ -278,14 +293,34 @@ class AtmClient {
 
     
         } catch (TimeoutException e) {
+            if(cardFileCreated){
+                    File f = new File(cardFile);
+                    if(f.exists())
+                        System.err.println(f.delete());
+                }
             future.cancel(true);
             System.exit(63);
         } catch (ConnectException e) {
+            if(cardFileCreated){
+                    File f = new File(cardFile);
+                    if(f.exists())
+                        System.err.println(f.delete());
+                }
             System.exit(63);
         } catch (ExecutionException e) {
+            if(cardFileCreated){
+                    File f = new File(cardFile);
+                    if(f.exists())
+                        System.err.println(f.delete());
+                }
           System.out.println("protocol_error");
           System.exit(63);
         } catch (Exception e) {
+            if(cardFileCreated){
+                    File f = new File(cardFile);
+                    if(f.exists())
+                        System.err.println(f.delete());
+                }
           //TODO: check for other exceptions? refine ExecutionException?
           // get rid of printing stacktrace
           e.printStackTrace();
