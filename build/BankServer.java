@@ -75,6 +75,7 @@ class BankServer {
 
         // First Create the keystore with filename of input, default bank.auth
         // check if already exists and exit if it does
+        
         File af = new File(authFile);
         if (af.exists()) {
           System.err.println("Error: authfile: " + authFile + "  already exists, exiting...");
@@ -94,7 +95,9 @@ class BankServer {
         } catch (InterruptedException e) {
           //TODO: handling
         }
+        
         System.out.println("created");
+        System.out.flush();
 
         // setup keystores
         try {
@@ -122,7 +125,7 @@ class BankServer {
           server.setEnabledProtocols(protocol);
           // and TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
           server.setEnabledCipherSuites(suites);
-
+          
         
         } catch (GeneralSecurityException gse) {
           // TODO: handling
@@ -164,6 +167,8 @@ class BankServer {
 
                 boolean error = false;
                 
+                BigDecimal bigRequestedAmount = null;
+                
                 switch (mode) {
 
                     case 'n':   //new account
@@ -172,9 +177,11 @@ class BankServer {
                             error = true;
                             break;
                         }
-
+                        
+                        bigRequestedAmount = new BigDecimal(requestedAmount);
                         account = new Account();
-                        account.balance = requestedAmount;
+                        //account.balance = requestedAmount;
+                        account.bigbalance = bigRequestedAmount;
                         account.cardFileName = requestedCardFileName;
                         account.cardFileContent = cardFileContent;
 
@@ -194,16 +201,24 @@ class BankServer {
                             break;
                         }
 
-                        if (account.cardFileName.compareTo(requestedCardFileName) != 0 || !checkCardFiles(account.cardFileContent, cardFileContent) || requestedAmount <= 0) {
+                        if ( !checkCardFiles(account.cardFileContent, cardFileContent) || requestedAmount <= 0) {
+                            error = true;
+                            break;
+                        }
+                        
+                        BigDecimal temp = new BigDecimal(requestedAmount);
+                        if(account.bigbalance.subtract(temp).compareTo(BigDecimal.ZERO) == -1){
                             error = true;
                             break;
                         }
 
-                        if (account.balance-requestedAmount < 0) {
-                            error = true;
-                            break;
-                        }
-                        account.balance -= requestedAmount;
+                        
+                        //if (account.balance-requestedAmount < 0) {
+                        //    error = true;
+                        //    break;
+                        //}
+                        //account.balance -= requestedAmount;
+                        account.bigbalance = account.bigbalance.subtract(temp);
                         
                         jsonBuilder.add("withdraw", requestedAmount);
 
@@ -218,12 +233,13 @@ class BankServer {
                             break;
                         }
 
-                        if (account.cardFileName.compareTo(requestedCardFileName) != 0 || !checkCardFiles(account.cardFileContent, cardFileContent) || requestedAmount <= 0) {
+                        if ( !checkCardFiles(account.cardFileContent, cardFileContent) || requestedAmount <= 0) {
                             error = true;
                             break;
                         }
 
-                        account.balance += requestedAmount;
+                        //account.balance += requestedAmount;
+                        account.bigbalance = account.bigbalance.add(new BigDecimal(requestedAmount));
                         //what about max balance ??
                         jsonBuilder.add("deposit", requestedAmount);
 
@@ -238,11 +254,11 @@ class BankServer {
                             break;
                         }
 
-                        if (account.cardFileName.compareTo(requestedCardFileName) != 0 || !checkCardFiles(account.cardFileContent, cardFileContent) ) {
+                        if ( !checkCardFiles(account.cardFileContent, cardFileContent) ) {
                             error = true;
                         }
                         
-                        jsonBuilder.add("balance", account.balance);
+                        jsonBuilder.add("balance", account.bigbalance.setScale(2, BigDecimal.ROUND_HALF_UP));
 
                         break;
 
@@ -290,7 +306,8 @@ class BankServer {
 
 class Account {
 
-    double balance;
+    //double balance;
+    BigDecimal bigbalance; 
     String cardFileName;
     String cardFileContent;
 
