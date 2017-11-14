@@ -15,6 +15,9 @@ import java.util.logging.Logger;
 import javax.net.ssl.*;
 import java.security.*;
 
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
+
 import org.apache.commons.cli.*;
 
 class BankServer {
@@ -23,8 +26,20 @@ class BankServer {
     static HashMap<String, Account> allAccounts = null;
     //static HashMap<String, String> cardFiles = null;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
+      Signal.handle(new Signal("TERM"), new SignalHandler() {
+        public void handle(Signal sig) {
+          System.err.println("Signal caught");
+          System.exit(0);
+        }
+      });
+      Signal.handle(new Signal("INT"), new SignalHandler() {
+        public void handle(Signal sig) {
+          System.err.println("Signal caught");
+          System.exit(0);
+        }
+      });
         allAccounts = new HashMap<String, Account>();
         //cardFiles = new HashMap<String, String>();   //we will need a separate HashMap for cardFiles !
                                                     // because we need to check if cardFileName is duplicated or not.
