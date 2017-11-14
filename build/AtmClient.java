@@ -11,6 +11,7 @@ import java.io.StringReader;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -62,8 +63,8 @@ class AtmClient {
             line = bufferedReader.readLine();
             bufferedReader.close(); 
         }catch(FileNotFoundException e1){
-        System.exit(255); //is this correct ??
-                }
+            System.exit(255); //is this correct ??
+        }
         catch(IOException e2){
             System.exit(255); //is this correct ??
         }
@@ -100,7 +101,7 @@ class AtmClient {
             ArgumentParser.printInvalidArgs(options);
         } 
 
-        String account = cmd.getOptionValue('a');
+        String account = ArgumentParser.getOptionValue(cmd, 'a', "");
         if (!Validator.validateAccountName(account)) {
             ArgumentParser.printInvalidArgs(options);
         }
@@ -125,21 +126,21 @@ class AtmClient {
         boolean logging = cmd.hasOption('v');
         if (cmd.hasOption('n')) {
             mode = "n";
-            String num = cmd.getOptionValue('n');
+            String num = ArgumentParser.getOptionValue(cmd, 'n', "");
             if (!Validator.validateNumber(num)) {
                 ArgumentParser.printInvalidArgs(options);
             }
             amount = Double.valueOf(num);
         } else if (cmd.hasOption('d')) {
             mode = "d";
-            String num = cmd.getOptionValue('d');
+            String num = ArgumentParser.getOptionValue(cmd, 'd', "");
             if (!Validator.validateNumber(num)) {
                 ArgumentParser.printInvalidArgs(options);
             }
             amount = Double.valueOf(num);
         } else if (cmd.hasOption('w')) {
             mode = "w";
-            String num = cmd.getOptionValue('w');
+            String num = ArgumentParser.getOptionValue(cmd, 'w', "");
             if (!Validator.validateNumber(num)) {
                 ArgumentParser.printInvalidArgs(options);
             }
@@ -213,7 +214,7 @@ class AtmClient {
               tmf.getTrustManagers(),
               secureRandom );
         } catch (GeneralSecurityException gse) {
-          //TODO
+            System.exit(255);
         }
         
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -278,8 +279,13 @@ class AtmClient {
             System.exit(63);
         } catch (ConnectException e) {
             System.exit(63);
+        } catch (ExecutionException e) {
+          System.out.println("protocol_error");
+          System.exit(63);
         } catch (Exception e) {
-            e.printStackTrace();
+          //TODO: check for other exceptions? refine ExecutionException?
+          // get rid of printing stacktrace
+          e.printStackTrace();
         }
 
         executor.shutdownNow();
