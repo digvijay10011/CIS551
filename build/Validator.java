@@ -79,6 +79,6 @@ class Validator {
                                 (parts.length == 2 && parts[1].length() != 2)) {
             return false;
         } 
-        return !(num.charAt(0) == '0' && num.length() > 1);
+        return !(num.charAt(0) == '0' && parts[0].length() > 1);
     }
 }

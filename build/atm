@@ -2,5 +2,4 @@
 
 #my_dir=$( dirname "${BASH_SOURCE[0]}" )
 my_dir=/home/builder/submission/build
-javac -cp .:$my_dir:$my_dir/*: $my_dir/AtmClient.java
 java -cp .:$my_dir:$my_dir/* AtmClient "$@"

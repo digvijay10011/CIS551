@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#export my_dir=$( dirname "${BASH_SOURCE[0]}" )
-export my_dir=/home/builder/submission/build
-javac -cp .:$my_dir:$my_dir/*: $my_dir/BankServer.java
+export my_dir=$( dirname "${BASH_SOURCE[0]}" )
+#export my_dir=/home/builder/submission/build
+#javac -cp .:$my_dir:$my_dir/*: $my_dir/BankServer.java
 java -cp .:$my_dir:$my_dir/* BankServer "$@"
