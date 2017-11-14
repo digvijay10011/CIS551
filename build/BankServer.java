@@ -94,7 +94,7 @@ class BankServer {
         } catch (InterruptedException e) {
           //TODO: handling
         }
-        System.out.println("created");
+        System.out.println("created\n");
         System.out.flush();
 
         // setup keystores
