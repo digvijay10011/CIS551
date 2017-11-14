@@ -1,2 +1,3 @@
-javac -cp .:javax.json-1.1.jar:commons-cli-1.4.jar BankServer.java
-java -cp .:javax.json-1.1.jar:commons-cli-1.4.jar BankServer "$@"
+export my_dir=$( dirname "${BASH_SOURCE[0]}" )
+javac -cp .:$my_dir:$my_dir/*: $my_dir/BankServer.java
+java -cp .:$my_dir:$my_dir/* BankServer "$@"
