@@ -25,6 +25,9 @@ class BankServer {
 
     public static void main(String[] args) {
 
+        System.out.println("created");
+        System.out.flush();
+        
         allAccounts = new HashMap<String, Account>();
         //cardFiles = new HashMap<String, String>();   //we will need a separate HashMap for cardFiles !
                                                     // because we need to check if cardFileName is duplicated or not.
@@ -96,8 +99,8 @@ class BankServer {
           //TODO: handling
         }
         */
-        System.out.println("created");
-        System.out.flush();
+        //System.out.println("created");
+        //System.out.flush();
 
         // setup keystores
         try {
