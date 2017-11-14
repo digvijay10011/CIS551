@@ -95,6 +95,7 @@ class BankServer {
           //TODO: handling
         }
         System.out.println("created");
+        System.out.flush();
 
         // setup keystores
         try {
