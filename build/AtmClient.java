@@ -11,6 +11,7 @@ import java.io.StringReader;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -278,8 +279,13 @@ class AtmClient {
             System.exit(63);
         } catch (ConnectException e) {
             System.exit(63);
+        } catch (ExecutionException e) {
+          System.out.println("protocol_error");
+          System.exit(63);
         } catch (Exception e) {
-            e.printStackTrace();
+          //TODO: check for other exceptions? refine ExecutionException?
+          // get rid of printing stacktrace
+          e.printStackTrace();
         }
 
         executor.shutdownNow();

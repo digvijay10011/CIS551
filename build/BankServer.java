@@ -265,8 +265,12 @@ class BankServer {
                 pw.close();
                 clientSocket.close();
 
+            } catch (SSLHandshakeException e) {
+              System.out.println("protocol_error");
             } catch (Exception e) {
-                System.out.println("error!");
+              //TODO: check for other exceptions?
+              // get rid of printing stack trace
+              e.printStackTrace();
                 //everytime a client disconnects, exception will be thrown
             }
         }
