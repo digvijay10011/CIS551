@@ -126,9 +126,12 @@ class BankServer {
         
         } catch (GeneralSecurityException gse) {
           // TODO: handling
+            System.err.println("GeneralSecurityException trying to create secure socket, exiting..");
+            System.exit(255);
         } catch (IOException ex) {
             //handle it !!!!!
-            System.exit(63);
+            System.err.println("IOException trying to create key file");
+            System.exit(255);
         }
         
         while (true) {
@@ -266,6 +269,8 @@ class BankServer {
                 clientSocket.close();
 
             } catch (SSLHandshakeException e) {
+              System.out.println("protocol_error");
+            } catch (SSLException e) {
               System.out.println("protocol_error");
             } catch (Exception e) {
               //TODO: check for other exceptions?
