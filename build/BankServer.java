@@ -86,14 +86,16 @@ class BankServer {
         try {
           proc = Runtime.getRuntime().exec(command);
         } catch (IOException e) {
-          // TODO: handling
+          System.err.println("Error running shell script, exiting...");
+          System.exit(255);
         }
 
         // wait for it to finish
         try {
           proc.waitFor();
         } catch (InterruptedException e) {
-          //TODO: handling
+          System.err.println("Error waiting for shell script to finish, exiting...");
+          System.exit(255);
         }
         
         System.out.println("created");
@@ -128,11 +130,9 @@ class BankServer {
           
         
         } catch (GeneralSecurityException gse) {
-          // TODO: handling
             System.err.println("GeneralSecurityException trying to create secure socket, exiting..");
             System.exit(255);
         } catch (IOException ex) {
-            //handle it !!!!!
             System.err.println("IOException trying to create key file");
             System.exit(255);
         }
@@ -291,8 +291,9 @@ class BankServer {
             } catch (Exception e) {
               //TODO: check for other exceptions?
               // get rid of printing stack trace
-              e.printStackTrace();
+              // e.printStackTrace();
                 //everytime a client disconnects, exception will be thrown
+                System.out.println("protocol_error");
             }
         }
 
