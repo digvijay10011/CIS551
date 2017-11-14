@@ -96,7 +96,7 @@ class BankServer {
           //TODO: handling
         }
         */
-        System.out.println("created\n");
+        System.out.println("created");
         System.out.flush();
 
         // setup keystores
@@ -125,7 +125,9 @@ class BankServer {
           server.setEnabledProtocols(protocol);
           // and TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
           server.setEnabledCipherSuites(suites);
-
+          
+        System.out.println("created");
+        System.out.flush();
         
         } catch (GeneralSecurityException gse) {
           // TODO: handling
