@@ -201,7 +201,8 @@ class BankServer {
                             break;
                         }
                         
-                        bigRequestedAmount = new BigDecimal(requestedAmount);
+                        //bigRequestedAmount = new BigDecimal(requestedAmount);
+                        bigRequestedAmount = new BigDecimal(requestedAmount).setScale(2, BigDecimal.ROUND_HALF_UP);
                         account = new Account();
                         //account.balance = requestedAmount;
                         account.bigbalance = bigRequestedAmount;
@@ -230,6 +231,7 @@ class BankServer {
                         }
                         
                         BigDecimal temp = new BigDecimal(requestedAmount);
+                        temp = temp.setScale(2, BigDecimal.ROUND_HALF_UP);
                         if(account.bigbalance.subtract(temp).compareTo(BigDecimal.ZERO) == -1){
                             error = true;
                             break;
@@ -262,7 +264,8 @@ class BankServer {
                         }
 
                         //account.balance += requestedAmount;
-                        account.bigbalance = account.bigbalance.add(new BigDecimal(requestedAmount));
+                        //account.bigbalance = account.bigbalance.add(new BigDecimal(requestedAmount));
+                        account.bigbalance = account.bigbalance.add(new BigDecimal(requestedAmount).setScale(2, BigDecimal.ROUND_HALF_UP));
                         //what about max balance ??
                         jsonBuilder.add("deposit", requestedAmount);
 
