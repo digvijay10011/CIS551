@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.*;
 
 import org.apache.commons.cli.*;
 import javax.json.*;
@@ -88,6 +89,16 @@ class AtmClient {
         optionGroup.addOption(new Option("g", false, "balance"));
         optionGroup.setRequired(true);
         options.addOptionGroup(optionGroup);
+
+        Set<String> flags = new HashSet<String>();
+        for (int i = 0; i < args.length; i++) {
+            if (flags.contains(args[i])) {
+                ArgumentParser.printInvalidArgs(options);
+            }
+            if (args[i].length() > 0 && args[i].charAt(0) == '-') {
+                flags.add(args[i]);
+            }
+        }
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
