@@ -115,7 +115,7 @@ class AtmClient {
         if (!Validator.validateIPAddress(ipAddress)) {
             ArgumentParser.printInvalidArgs(options);
         }
-        int port = Integer.valueOf(ArgumentParser.getOptionValue(cmd, 'p', "3000"));
+        int port = Integer.valueOf(Validator.validateNumber(ArgumentParser.getOptionValue(cmd, 'p', "3000")));
         if (port < 1024 || port > 65535) {
             ArgumentParser.printInvalidArgs(options);
         }
