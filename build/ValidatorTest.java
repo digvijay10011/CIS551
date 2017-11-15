@@ -113,6 +113,11 @@ public class ValidatorTest {
     }
 
     @Test
+    public void testValidateNumberDot() {
+        assertFalse(Validator.validateNumber("12."));
+    }
+
+    @Test
     public void testValidateNumberLeadingZeros() {
         assertFalse(Validator.validateNumber("0331"));
     }

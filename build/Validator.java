@@ -63,7 +63,7 @@ class Validator {
     }
 
     static boolean validateNumber(String num) {
-        if (num == null || num.length() == 0) {
+        if (num == null || num.length() == 0 || num.charAt(num.length()-1) == '.') {
             return false;
         }
         try {
