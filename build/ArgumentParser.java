@@ -21,7 +21,8 @@ class ArgumentParser {
     }
 
     static void printInvalidArgs(Options options) {
-        (new HelpFormatter()).printHelp("atm", options);
+        // (new HelpFormatter()).printHelp("atm", options);
+        System.err.println("Invalid Arguments");
         System.exit(255);
         return;
     }
