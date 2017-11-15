@@ -49,6 +49,11 @@ class BankServer {
         ArgumentParser.generateOption(options, "s", true, "auth-file", false);
         ArgumentParser.generateOption(options, "p", true, "account", false);
 
+        if (ArgumentParser.hasDuplicateFlags(args)) {
+            ArgumentParser.printInvalidArgs(options);
+        }
+
+
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
 
