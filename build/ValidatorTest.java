@@ -11,6 +11,12 @@ public class ValidatorTest {
     }
 
     @Test
+    public void testValidateFileNameSlash() {
+        assertFalse(Validator.validateFileName("abc/def"));
+        assertFalse(Validator.validateFileName("abc\\def"));
+    }
+
+    @Test
     public void testValidateFileNameExtra() {
         assertTrue(Validator.validateFileName("f.i123l_90e-"));
     }

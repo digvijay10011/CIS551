@@ -80,7 +80,6 @@ class AtmClient {
         ArgumentParser.generateOption(options, "i", true, "ip-address", false);
         ArgumentParser.generateOption(options, "p", true, "port", false);
         ArgumentParser.generateOption(options, "c", true, "card-file", false);
-        // TODO: Remove this before submitting
         
         OptionGroup optionGroup = new OptionGroup();
         optionGroup.addOption(new Option("n", true, "new-account"));
@@ -96,9 +95,13 @@ class AtmClient {
         try {
             cmd = parser.parse(options, args);
         } catch (Exception e) {
-            // System.out.println(e.getMessage());
             ArgumentParser.printInvalidArgs(options);
         } 
+
+        // If there are any unrecognized arguments left, reject it
+        if (cmd.getArgs().length > 0) {
+            ArgumentParser.printInvalidArgs(options);
+        }
 
         String account = ArgumentParser.getOptionValue(cmd, 'a', "");
         if (!Validator.validateAccountName(account)) {
@@ -122,7 +125,6 @@ class AtmClient {
         }
         String mode = "";
         double amount = 0;
-        boolean logging = false;
         if (cmd.hasOption('n')) {
             mode = "n";
             String num = ArgumentParser.getOptionValue(cmd, 'n', "");
@@ -150,16 +152,6 @@ class AtmClient {
             ArgumentParser.printInvalidArgs(options);
         }
 
-        if (logging) {
-            System.out.println(account);
-            System.out.println(authFile);
-            System.out.println(ipAddress);
-            System.out.println(port);
-            System.out.println(cardFile);
-            System.out.println(mode);
-            System.out.println(amount);
-        }
-        
         String cardFileContent = "";
         boolean cardFileCreated = false;
            

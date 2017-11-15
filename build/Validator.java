@@ -3,7 +3,7 @@ import java.util.regex.*;
 
 class Validator {
     static boolean validateFileName(String fileName) {
-        Pattern p = Pattern.compile("[-_.0-9a-z]");
+        Pattern p = Pattern.compile("[-_\\.0-9a-z]");
         for (int i = 0; i < fileName.length(); i++) {
             char c = fileName.charAt(i);
             if (!p.matcher(c+"").find()) {
@@ -79,6 +79,6 @@ class Validator {
                                 (parts.length == 2 && parts[1].length() != 2)) {
             return false;
         } 
-        return !(num.charAt(0) == '0' && parts[0].length() > 1); //before it was num.length() > 1
+        return !(num.charAt(0) == '0' && parts[0].length() > 1);
     }
 }
