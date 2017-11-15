@@ -312,7 +312,6 @@ class AtmClient {
                     if(f.exists())
                         System.err.println(f.delete());
                 }
-          System.out.println("protocol_error");
           System.exit(63);
         } catch (Exception e) {
             if(cardFileCreated){
