@@ -128,21 +128,21 @@ class AtmClient {
         if (cmd.hasOption('n')) {
             mode = "n";
             String num = ArgumentParser.getOptionValue(cmd, 'n', "");
-            if (!Validator.validateNumber(num)) {
+            if (!Validator.validateBalance(num)) {
                 ArgumentParser.printInvalidArgs(options);
             }
             amount = Double.valueOf(num);
         } else if (cmd.hasOption('d')) {
             mode = "d";
             String num = ArgumentParser.getOptionValue(cmd, 'd', "");
-            if (!Validator.validateNumber(num)) {
+            if (!Validator.validateBalance(num)) {
                 ArgumentParser.printInvalidArgs(options);
             }
             amount = Double.valueOf(num);
         } else if (cmd.hasOption('w')) {
             mode = "w";
             String num = ArgumentParser.getOptionValue(cmd, 'w', "");
-            if (!Validator.validateNumber(num)) {
+            if (!Validator.validateBalance(num)) {
                 ArgumentParser.printInvalidArgs(options);
             }
             amount = Double.valueOf(num);

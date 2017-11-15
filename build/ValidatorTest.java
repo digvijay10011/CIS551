@@ -128,6 +128,11 @@ public class ValidatorTest {
     }
 
     @Test
+    public void testValidateBalanceDotRegression() {
+        assertFalse(Validator.validateBalance("12.9"));
+    }
+
+    @Test
     public void testValidateBalanceLeadingZeros() {
         assertFalse(Validator.validateBalance("0331"));
     }
