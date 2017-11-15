@@ -48,8 +48,11 @@ class BankServer {
         
         ArgumentParser.generateOption(options, "s", true, "auth-file", false);
         ArgumentParser.generateOption(options, "p", true, "account", false);
-        // TODO: Remove this before submitting
-        ArgumentParser.generateOption(options, "v", false, "verbose", false);
+
+        if (ArgumentParser.hasDuplicateFlags(args)) {
+            ArgumentParser.printInvalidArgs(options);
+        }
+
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
@@ -63,6 +66,9 @@ class BankServer {
 
         String authFile = ArgumentParser.getOptionValue(cmd, 's', "bank.auth");
         if (!Validator.validateFileName(authFile)) {
+            ArgumentParser.printInvalidArgs(options);
+        }
+        if (!Validator.validateNumber(ArgumentParser.getOptionValue(cmd, 'p', "3000"))) {
             ArgumentParser.printInvalidArgs(options);
         }
         int port = Integer.valueOf(ArgumentParser.getOptionValue(cmd, 'p', "3000"));

@@ -1,3 +1,5 @@
+import java.util.*;
+
 import org.apache.commons.cli.*;
 
 class ArgumentParser {
@@ -18,6 +20,20 @@ class ArgumentParser {
             return cmd.getOptionValue(opt);
         }
         return def;
+    }
+
+    static boolean hasDuplicateFlags(String[] args) {
+        Set<String> flags = new HashSet<String>();
+        for (int i = 0; i < args.length; i++) {
+            if (flags.contains(args[i])) {
+                return true;
+            }
+            if (args[i].length() > 0 && args[i].charAt(0) == '-') {
+                flags.add(args[i]);
+            }
+        }
+
+        return false;
     }
 
     static void printInvalidArgs(Options options) {
