@@ -48,8 +48,6 @@ class BankServer {
         
         ArgumentParser.generateOption(options, "s", true, "auth-file", false);
         ArgumentParser.generateOption(options, "p", true, "account", false);
-        // TODO: Remove this before submitting
-        ArgumentParser.generateOption(options, "v", false, "verbose", false);
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
