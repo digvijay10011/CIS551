@@ -98,53 +98,63 @@ public class ValidatorTest {
     }
 
     @Test
-    public void testValidateNumberDecimal() {
-        assertTrue(Validator.validateNumber("331.06"));
+    public void testValidateNumberLeading() {
+        assertFalse(Validator.validateNumber("0200"));
     }
 
     @Test
-    public void testValidateNumberMoreDecimal() {
-        assertFalse(Validator.validateNumber("331.461"));
+    public void testValidateBalance() {
+        assertFalse(Validator.validateBalance("200"));
     }
 
     @Test
-    public void testValidateNumberLessDecimal() {
-        assertFalse(Validator.validateNumber("331.4"));
+    public void testValidateBalanceDecimal() {
+        assertTrue(Validator.validateBalance("331.06"));
     }
 
     @Test
-    public void testValidateNumberDot() {
-        assertFalse(Validator.validateNumber("12."));
+    public void testValidateBalanceMoreDecimal() {
+        assertFalse(Validator.validateBalance("331.461"));
     }
 
     @Test
-    public void testValidateNumberLeadingZeros() {
-        assertFalse(Validator.validateNumber("0331"));
+    public void testValidateBalanceLessDecimal() {
+        assertFalse(Validator.validateBalance("331.4"));
+    }
+
+    @Test
+    public void testValidateBalanceDot() {
+        assertFalse(Validator.validateBalance("12."));
+    }
+
+    @Test
+    public void testValidateBalanceLeadingZeros() {
+        assertFalse(Validator.validateBalance("0331"));
     }
     
     @Test
-    public void testValidateNumberLeadingZerosDecimal() {
-        assertFalse(Validator.validateNumber("002331.42"));
+    public void testValidateBalanceLeadingZerosDecimal() {
+        assertFalse(Validator.validateBalance("002331.42"));
     }
 
     @Test
-    public void testValidateNumberLetters() {
-        assertFalse(Validator.validateNumber("a23.31"));
+    public void testValidateBalanceLetters() {
+        assertFalse(Validator.validateBalance("a23.31"));
     }
 
     @Test
-    public void testValidateNumberLettersMiddle() {
-        assertFalse(Validator.validateNumber("20a0"));
+    public void testValidateBalanceLettersMiddle() {
+        assertFalse(Validator.validateBalance("20a0"));
     }
     
     @Test
-    public void testValidateNumberNegative() {
-        assertFalse(Validator.validateNumber("-0.03"));
+    public void testValidateBalanceNegative() {
+        assertFalse(Validator.validateBalance("-0.03"));
     }
 
     @Test
-    public void testValidateNumberLarge() {
-        assertFalse(Validator.validateNumber("4294967296.78"));
+    public void testValidateBalanceLarge() {
+        assertFalse(Validator.validateBalance("4294967296.78"));
     }
 
     @Test

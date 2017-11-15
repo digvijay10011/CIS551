@@ -63,22 +63,59 @@ class Validator {
     }
 
     static boolean validateNumber(String num) {
-        if (num == null || num.length() == 0 || num.charAt(num.length()-1) == '.') {
+        if (num == null || num.length() == 0) {
             return false;
         }
         try {
-            if (Double.valueOf(num) < 0 || Double.valueOf(num) > 4294967295.99) {
+            double n = Double.valueOf(num);
+            if (n < 0 || n > 4294967295.99) {
+                return false;
+            }
+
+            if (n == 0) {
+                return true;
+            }
+        } catch(NumberFormatException e) {
+            return false;
+        }
+
+        return num.charAt(0) != '0';
+    }
+
+    static boolean validateLeadingZeroNumber(String num) {
+        if (num == null || num.length() == 0) {
+            return false;
+        }
+        try {
+            double n = Double.valueOf(num);
+            if (n < 0 || n > 4294967295.99) {
                 return false;
             }
         } catch(NumberFormatException e) {
             return false;
         }
 
-        String[] parts = num.split("\\.");
+        return true;
+    }
+
+    static boolean validateBalance(String balance) {
+        if (balance == null || balance.length() == 0 ||
+            balance.charAt(balance.length()-1) == '.' ||
+            balance.charAt(0) == '-') {
+            return false;
+        }
+
+        // Balance must have a .
+        if (balance.indexOf('.') == -1) {
+            return false;
+        }
+
+        String[] parts = balance.split("\\.");
         if (parts.length > 2 || parts.length == 0 ||
                                 (parts.length == 2 && parts[1].length() != 2)) {
             return false;
         } 
-        return !(num.charAt(0) == '0' && parts[0].length() > 1);
+        return validateNumber(parts[0]) &&
+                validateLeadingZeroNumber(parts[1]);
     }
 }
