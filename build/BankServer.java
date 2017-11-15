@@ -162,9 +162,9 @@ class BankServer {
         
         while (true) {
             try {
-                Socket clientSocket = null;
+                SSLSocket clientSocket = null;
                 
-                clientSocket = server.accept();
+                clientSocket = (SSLSocket) server.accept();
                 
                 BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 PrintWriter pw = new PrintWriter(clientSocket.getOutputStream());
