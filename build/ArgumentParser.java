@@ -22,17 +22,16 @@ class ArgumentParser {
         return def;
     }
 
-    static boolean hasDuplicateFlags(String[] args) {
-        Set<String> flags = new HashSet<String>();
-        for (int i = 0; i < args.length; i++) {
-            if (flags.contains(args[i])) {
+    static boolean hasDuplicateFlags(Option[] options) {
+        Set<Character> flags = new HashSet<>();
+        for (int i = 0; i < options.length; i++) {
+            Option option = options[i];
+            char flag = option.getOpt().charAt(0);
+            if (flags.contains(flag)) {
                 return true;
             }
-            if (args[i].length() > 0 && args[i].charAt(0) == '-') {
-                flags.add(args[i]);
-            }
+            flags.add(flag);
         }
-
         return false;
     }
 

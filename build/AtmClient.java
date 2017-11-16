@@ -89,10 +89,6 @@ class AtmClient {
         optionGroup.setRequired(true);
         options.addOptionGroup(optionGroup);
 
-        if (ArgumentParser.hasDuplicateFlags(args)) {
-            ArgumentParser.printInvalidArgs(options);
-        }
-
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
 
@@ -104,6 +100,10 @@ class AtmClient {
 
         // If there are any unrecognized arguments left, reject it
         if (cmd.getArgs().length > 0) {
+            ArgumentParser.printInvalidArgs(options);
+        }
+
+        if (ArgumentParser.hasDuplicateFlags(cmd.getOptions())) {
             ArgumentParser.printInvalidArgs(options);
         }
 
@@ -332,7 +332,7 @@ class AtmClient {
                 }
           //TODO: check for other exceptions? refine ExecutionException?
           // get rid of printing stacktrace
-          e.printStackTrace();
+        //   System.err.println(e.toString());
         }
 
         executor.shutdownNow();
