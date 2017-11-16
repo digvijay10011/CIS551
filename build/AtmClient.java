@@ -263,14 +263,8 @@ class AtmClient {
                     return response;
                 }
             });
-            Thread.sleep(15000);
-            pw.println(value.toString());
-            pw.flush();
 
-            String response = null;
-            while((response=br.readLine()) == null);
-
-            //String response = future.get(10, TimeUnit.SECONDS);
+            String response = future.get(10, TimeUnit.SECONDS);
             
             JsonReader jsonReader = Json.createReader(
                                                     new StringReader(response));
@@ -298,8 +292,7 @@ class AtmClient {
             serverSocket.close();
 
     
-        }
-         catch (TimeoutException e) {
+        } catch (TimeoutException e) {
             if(cardFileCreated){
                     File f = new File(cardFile);
                     if(f.exists())
@@ -307,24 +300,21 @@ class AtmClient {
                 }
             future.cancel(true);
             System.exit(63);
-        } 
-        catch (ConnectException e) {
+        } catch (ConnectException e) {
             if(cardFileCreated){
                     File f = new File(cardFile);
                     if(f.exists())
                         System.err.println(f.delete());
                 }
             System.exit(63);
-        }
-         catch (ExecutionException e) {
+        } catch (ExecutionException e) {
             if(cardFileCreated){
                     File f = new File(cardFile);
                     if(f.exists())
                         System.err.println(f.delete());
                 }
           System.exit(63);
-        }
-         catch (Exception e) {
+        } catch (Exception e) {
             if(cardFileCreated){
                     File f = new File(cardFile);
                     if(f.exists())
