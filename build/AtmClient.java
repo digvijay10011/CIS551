@@ -228,7 +228,7 @@ class AtmClient {
           serverSocket.setEnabledProtocols(protocol);
           // and require TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
           serverSocket.setEnabledCipherSuites(suites);
-          serverSocket.setSoTimeout(10000);
+          serverSocket.setSoTimeout(2000);
             
          
         
