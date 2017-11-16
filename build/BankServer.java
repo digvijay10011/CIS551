@@ -144,13 +144,14 @@ class BankServer {
               secureRandom );
           SSLServerSocketFactory ssf = sslContext.getServerSocketFactory();
           server = (SSLServerSocket)ssf.createServerSocket(port);
+          server.setSoTimeout(10000);
           // require client authorization
           server.setNeedClientAuth(true);
           // require TLSv1.2
           server.setEnabledProtocols(protocol);
           // and TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
           server.setEnabledCipherSuites(suites);
-          server.setSoTimeout(10000);
+          
         } catch (GeneralSecurityException gse) {
             System.err.println("GeneralSecurityException trying to create secure socket, exiting..");
             System.exit(255);

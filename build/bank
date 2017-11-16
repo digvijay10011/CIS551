@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #export my_dir=$( dirname "${BASH_SOURCE[0]}" )
-export my_dir=/home/builder/submission/build
+#export my_dir=/home/builder/submission/build
 #trap 'finish' SIGINT SIGTERM
 # trap 'echo hello; exit' SIGINT SIGTERM
 
@@ -12,5 +12,5 @@ export my_dir=/home/builder/submission/build
 #kill $processId
 #}
 
-#export my_dir=/Users/georgeasullivan/Documents/classes/17fall/cis551/Project/CIS551/build
+export my_dir=/Users/digvijaychauhan/Documents/cis551_new/CIS551/build
 exec java -cp .:$my_dir:$my_dir/* BankServer "$@"
