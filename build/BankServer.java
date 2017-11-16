@@ -12,6 +12,13 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import javax.net.ssl.*;
 import java.security.*;
 
@@ -49,11 +56,6 @@ class BankServer {
         ArgumentParser.generateOption(options, "s", true, "auth-file", false);
         ArgumentParser.generateOption(options, "p", true, "account", false);
 
-        if (ArgumentParser.hasDuplicateFlags(args)) {
-            ArgumentParser.printInvalidArgs(options);
-        }
-
-
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
 
@@ -61,6 +63,10 @@ class BankServer {
             cmd = parser.parse(options, args);
         } catch (Exception e) {
             // System.out.println(e.getMessage());
+            ArgumentParser.printInvalidArgs(options);
+        }
+
+        if (ArgumentParser.hasDuplicateFlags(cmd.getOptions())) {
             ArgumentParser.printInvalidArgs(options);
         }
 
@@ -150,7 +156,7 @@ class BankServer {
           server.setEnabledProtocols(protocol);
           // and TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
           server.setEnabledCipherSuites(suites);
-          server.setSoTimeout(2000);
+        //   server.setSoTimeout(10000);
         } catch (GeneralSecurityException gse) {
             System.err.println("GeneralSecurityException trying to create secure socket, exiting..");
             System.exit(255);
@@ -160,15 +166,28 @@ class BankServer {
         }
         
         while (true) {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            Future<String> future = null;
             try {
-                SSLSocket clientSocket = null;
-                
-                clientSocket = (SSLSocket) server.accept();
-                
+                SSLSocket clientSocket = (SSLSocket) server.accept();
+
                 BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 PrintWriter pw = new PrintWriter(clientSocket.getOutputStream());
+
+                future = executor.submit(new Callable<String>() {
+                    @Override
+                    public String call() throws Exception {
+                        //getting response from the client.
+                        //If in the response, "error" = true, then
+                        //the transaction failed due to wrong inputs.
+                        String response = null;
+                        //waiting for server's respone
+                        while((response=br.readLine()) == null);
+                        return response;
+                    }
+                });
                 
-                String str = br.readLine();  //get the commands from client (basically, a JSON string)
+                String str = future.get(10, TimeUnit.SECONDS);  //get the commands from client (basically, a JSON string)
                 
                 JsonReader jsonReader = Json.createReader(new StringReader(str));
                 JsonObject object = jsonReader.readObject();
@@ -309,6 +328,9 @@ class BankServer {
                 pw.close();
                 clientSocket.close();
 
+            } catch(TimeoutException e) {
+                future.cancel(true);
+                System.out.println("protocol_error");
             } catch (SSLHandshakeException e) {
               System.out.println("protocol_error");
             } catch (SSLException e) {
