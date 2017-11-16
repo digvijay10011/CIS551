@@ -27,7 +27,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class AtmClient {
-
     private static boolean createCardFile(String cardFile){
             File f = new File(cardFile);
             if(f.exists()){
@@ -71,10 +70,8 @@ class AtmClient {
         return line;
     }
 
-    
     public static void main(String[] args) throws IOException {
         Options options = new Options();
-        
         ArgumentParser.generateOption(options, "a", true, "account", true);
         ArgumentParser.generateOption(options, "s", true, "auth-file", false);
         ArgumentParser.generateOption(options, "i", true, "ip-address", false);
@@ -98,7 +95,6 @@ class AtmClient {
             ArgumentParser.printInvalidArgs(options);
         } 
 
-        // If there are any unrecognized arguments left, reject it
         if (cmd.getArgs().length > 0) {
             ArgumentParser.printInvalidArgs(options);
         }
@@ -162,17 +158,14 @@ class AtmClient {
         String cardFileContent = "";
         boolean cardFileCreated = false;
            
-            if(mode.equals("n")){
+        if(mode.equals("n")){
             if(amount < 10)
                 System.exit(255);
             createCardFile(cardFile);
             cardFileCreated = true;
-        }//shouldn't return if cardfile already exists
-        //System.out.print("\n>--"+readCardFile(cardFile)+"--\n");
-        
+        }
         
         cardFileContent = readCardFile(cardFile);
-        
         
         SSLSocketFactory ssf = null;
         SSLSocket serverSocket = null;
@@ -185,19 +178,13 @@ class AtmClient {
         String[] protocol = { "TLSv1.2" };
         String[] suites = {"TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256"};
 
-        // setup random
         secureRandom = new SecureRandom();
         secureRandom.nextInt();
         try {
-          // setup server key store 
           serverKeyStore = KeyStore.getInstance("JKS");
-          serverKeyStore.load( new FileInputStream(authFile),
-              passphrase.toCharArray() );
-          // and client key store
+          serverKeyStore.load( new FileInputStream(authFile), passphrase.toCharArray() );
           clientKeyStore = KeyStore.getInstance("JKS");
-          clientKeyStore.load( new FileInputStream(authFile),
-              passphrase.toCharArray() );
-          // and ssl context
+          clientKeyStore.load( new FileInputStream(authFile), passphrase.toCharArray() );
           TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
 
           tmf.init( serverKeyStore);
@@ -206,15 +193,13 @@ class AtmClient {
           kmf.init( clientKeyStore, passphrase.toCharArray() );
 
           sslContext = SSLContext.getInstance("TLS");
-          sslContext.init(kmf.getKeyManagers(),
-              tmf.getTrustManagers(),
-              secureRandom );
+          sslContext.init(kmf.getKeyManagers(), tmf.getTrustManagers(), secureRandom );
         } catch (GeneralSecurityException gse) {
             if(cardFileCreated){
                     File f = new File(cardFile);
                     if(f.exists())
                         System.err.println(f.delete());
-                }
+            }
             System.exit(255);
         }
         
@@ -224,9 +209,7 @@ class AtmClient {
           ssf = sslContext.getSocketFactory();
           serverSocket = (SSLSocket)ssf.createSocket(ipAddress, port);
 
-          // require TLS 1.2
           serverSocket.setEnabledProtocols(protocol);
-          // and require TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
           serverSocket.setEnabledCipherSuites(suites);
           serverSocket.setSoTimeout(10000);
             
@@ -234,7 +217,7 @@ class AtmClient {
         
         JsonObject value = Json.createObjectBuilder().add("mode", mode)
                             .add("account", account).add("amount", amount)
-                            .add("cardfile", cardFile).add("port", port) //no need to send cardfile name
+                            .add("cardfile", cardFile).add("port", port)
                             .add("IPaddress", authFile)
                             .add("authFile", authFile)
                             .add("cardFileContent", cardFileContent)
@@ -250,15 +233,10 @@ class AtmClient {
             future = executor.submit(new Callable<String>() {
                 @Override
                 public String call() throws Exception {
-                    //passing the json object as string
                     pw.println(value.toString());
                     pw.flush();
                     
-                    //getting response from the server.
-                    //If in the response, "error" = true, then
-                    //the transaction failed due to wrong inputs.
                     String response = null;
-                    //waiting for server's respone
                     while((response=br.readLine()) == null);
                     return response;
                 }
@@ -281,17 +259,12 @@ class AtmClient {
                 }
                 System.exit(255);
             } else {
-                //responseObject;
-                
-                //Json.createObjectBuilder(responseObject).remove("error").build().toString();
                 System.out.println(Json.createObjectBuilder(responseObject).remove("error").build().toString());
             }
 
             pw.close();
             br.close();
             serverSocket.close();
-
-    
         } catch (TimeoutException e) {
             if(cardFileCreated){
                     File f = new File(cardFile);
@@ -312,17 +285,14 @@ class AtmClient {
                     File f = new File(cardFile);
                     if(f.exists())
                         System.err.println(f.delete());
-                }
+            }
           System.exit(63);
         } catch (Exception e) {
             if(cardFileCreated){
                     File f = new File(cardFile);
                     if(f.exists())
                         System.err.println(f.delete());
-                }
-          //TODO: check for other exceptions? refine ExecutionException?
-          // get rid of printing stacktrace
-        //   System.err.println(e.toString());
+            }
         }
 
         executor.shutdownNow();
