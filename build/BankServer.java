@@ -32,6 +32,9 @@ class BankServer {
     
     static HashMap<String, Account> allAccounts = null;
     //static HashMap<String, String> cardFiles = null;
+    static SSLSocket clientSocket = null;
+    static BufferedReader br = null;
+    static PrintWriter pw = null;
 
     public static void main(String[] args) throws InterruptedException {
 
@@ -169,10 +172,10 @@ class BankServer {
             ExecutorService executor = Executors.newSingleThreadExecutor();
             Future<String> future = null;
             try {
-                SSLSocket clientSocket = (SSLSocket) server.accept();
+                clientSocket = (SSLSocket) server.accept();
 
-                BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                PrintWriter pw = new PrintWriter(clientSocket.getOutputStream());
+               br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                pw = new PrintWriter(clientSocket.getOutputStream());
 
                 future = executor.submit(new Callable<String>() {
                     @Override
@@ -324,9 +327,6 @@ class BankServer {
                 
                 
 
-                br.close();
-                pw.close();
-                clientSocket.close();
 
             } catch(TimeoutException e) {
                 future.cancel(true);
@@ -341,7 +341,13 @@ class BankServer {
               // e.printStackTrace();
                 //everytime a client disconnects, exception will be thrown
                 System.out.println("protocol_error");
+            } finally {
+                try {
+                br.close();
+                pw.close();
+                clientSocket.close(); } catch (IOException e) {}
             }
+
         }
 
     }
