@@ -218,8 +218,6 @@ class AtmClient {
             System.exit(255);
         }
         
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Future<String> future = null;
         try {
           ssf = sslContext.getSocketFactory();
           serverSocket = (SSLSocket)ssf.createSocket(ipAddress, port);
@@ -228,7 +226,7 @@ class AtmClient {
           serverSocket.setEnabledProtocols(protocol);
           // and require TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
           serverSocket.setEnabledCipherSuites(suites);
-          serverSocket.setSoTimeout(2000);
+          serverSocket.setSoTimeout(10000);
             
          
         
@@ -247,24 +245,12 @@ class AtmClient {
                                         new InputStreamReader(
                                             serverSocket.getInputStream()));
             
-            future = executor.submit(new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    //passing the json object as string
                     pw.println(value.toString());
                     pw.flush();
                     
-                    //getting response from the server.
-                    //If in the response, "error" = true, then
-                    //the transaction failed due to wrong inputs.
                     String response = null;
-                    //waiting for server's respone
                     while((response=br.readLine()) == null);
-                    return response;
-                }
-            });
 
-            String response = future.get(10, TimeUnit.SECONDS);
             
             JsonReader jsonReader = Json.createReader(
                                                     new StringReader(response));
@@ -292,40 +278,24 @@ class AtmClient {
             serverSocket.close();
 
     
-        } catch (TimeoutException e) {
-            if(cardFileCreated){
-                    File f = new File(cardFile);
-                    if(f.exists())
-                        System.err.println(f.delete());
-                }
-            future.cancel(true);
-            System.exit(63);
         } catch (ConnectException e) {
+            System.err.println("ConnectException");
             if(cardFileCreated){
                     File f = new File(cardFile);
                     if(f.exists())
                         System.err.println(f.delete());
                 }
             System.exit(63);
-        } catch (ExecutionException e) {
-            if(cardFileCreated){
-                    File f = new File(cardFile);
-                    if(f.exists())
-                        System.err.println(f.delete());
-                }
-          System.exit(63);
         } catch (Exception e) {
+            System.err.println("Exception");
             if(cardFileCreated){
                     File f = new File(cardFile);
                     if(f.exists())
                         System.err.println(f.delete());
                 }
-          //TODO: check for other exceptions? refine ExecutionException?
-          // get rid of printing stacktrace
-          e.printStackTrace();
+            System.exit(63);
         }
 
-        executor.shutdownNow();
         System.exit(0);
     }
 }

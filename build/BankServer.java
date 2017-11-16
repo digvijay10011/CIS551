@@ -150,7 +150,6 @@ class BankServer {
           server.setEnabledProtocols(protocol);
           // and TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
           server.setEnabledCipherSuites(suites);
-          server.setSoTimeout(2000);
         } catch (GeneralSecurityException gse) {
             System.err.println("GeneralSecurityException trying to create secure socket, exiting..");
             System.exit(255);
@@ -158,12 +157,14 @@ class BankServer {
             System.err.println("IOException trying to create key file");
             System.exit(255);
         }
+        System.err.println("about to start loop");
         
         while (true) {
             try {
                 SSLSocket clientSocket = null;
                 
                 clientSocket = (SSLSocket) server.accept();
+                clientSocket.setSoTimeout(10000);
                 
                 BufferedReader br = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 PrintWriter pw = new PrintWriter(clientSocket.getOutputStream());
