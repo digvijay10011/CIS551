@@ -1,0 +1,6 @@
+#!/bin/bash
+
+#my_dir=$( dirname "${BASH_SOURCE[0]}" )
+#my_dir=/Users/digvijaychauhan/Documents/cis551_new/CIS551/build
+my_dir=/home/builder/submission/build
+java -cp .:$my_dir:$my_dir/* AtmClient "$@"
