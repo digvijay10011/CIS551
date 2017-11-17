@@ -1,0 +1,3 @@
+They haven’t handled the case when -gg is passed as an argument.
+Their program doesn’t throw error when -gg is passed as an argument.
+They have no code to check such duplicates.
