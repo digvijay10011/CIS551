@@ -203,8 +203,18 @@ class AtmClient {
             }
             System.exit(255);
         } catch (FileNotFoundException ex) {
+            if(cardFileCreated){
+                    File f = new File(cardFile);
+                    if(f.exists())
+                        System.err.println(f.delete());
+            }
            System.exit(255);
         } catch (IOException ex) {
+            if(cardFileCreated){
+                    File f = new File(cardFile);
+                    if(f.exists())
+                        System.err.println(f.delete());
+            }
             System.exit(255);
         } 
         
@@ -298,6 +308,7 @@ class AtmClient {
                     if(f.exists())
                         System.err.println(f.delete());
             }
+            System.exit(63);
         }
 
         executor.shutdownNow();

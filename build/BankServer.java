@@ -30,7 +30,7 @@ import org.apache.commons.cli.*;
 class BankServer {
     static HashMap<String, Account> allAccounts = null;
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws InterruptedException {
 
       Signal.handle(new Signal("TERM"), new SignalHandler() {
         public void handle(Signal sig) {
