@@ -135,21 +135,33 @@ class AtmClient {
             if (!Validator.validateBalance(num)) {
                 ArgumentParser.printInvalidArgs(options);
             }
+            try{
             amount = Double.valueOf(num);
+            }catch(Exception e){
+                System.exit(255);
+            }
         } else if (cmd.hasOption('d')) {
             mode = "d";
             String num = ArgumentParser.getOptionValue(cmd, 'd', "");
             if (!Validator.validateBalance(num)) {
                 ArgumentParser.printInvalidArgs(options);
             }
+            try{
             amount = Double.valueOf(num);
+            }catch(Exception e){
+                System.exit(255);
+            }
         } else if (cmd.hasOption('w')) {
             mode = "w";
             String num = ArgumentParser.getOptionValue(cmd, 'w', "");
             if (!Validator.validateBalance(num)) {
                 ArgumentParser.printInvalidArgs(options);
             }
+            try{
             amount = Double.valueOf(num);
+            }catch(Exception e){
+                System.exit(255);
+            }
         } else if (cmd.hasOption('g')) {
             mode = "g";
         } else {
