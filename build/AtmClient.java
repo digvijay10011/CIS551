@@ -203,7 +203,7 @@ class AtmClient {
             }
             System.exit(255);
         } catch (FileNotFoundException ex) {
-            System.exit(255);
+           System.exit(255);
         } catch (IOException ex) {
             System.exit(255);
         } 
