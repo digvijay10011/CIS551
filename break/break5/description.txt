@@ -1,0 +1,6 @@
+They didn't handle the rollback thing properly.
+
+At line number around 367 in atm.cpp, when they get message that the transaction failed, they are just exiting and not deleting the card file already created.
+
+So suppose there is an account with bob and card file bob.card
+When new account is tried to create with name bob but cardfile alice.card, it will fail and alice.card should be deleted but they are handling this rollback.
