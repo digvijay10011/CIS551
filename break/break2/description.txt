@@ -1,0 +1,1 @@
+When specified auth file is not found , they are throwing error 63 but it should be error 255.
