@@ -1,0 +1,2 @@
+At line 142 of Atm.java, when reading a file goes wrong, they are printing to standard output which is wrong.
+So our input just invokes that print statement.
