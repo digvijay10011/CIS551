@@ -1,0 +1,2 @@
+They handled the case when auth file is not present. But they did not handle the case when auth file is a bad file. For e.g. passing card file as an auth file.
+And hence the program wrongly exits with exit code 1.
