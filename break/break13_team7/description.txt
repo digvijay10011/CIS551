@@ -1,0 +1,6 @@
+No proper argument parsing.
+They are checking whether there are multiple options or not.
+But not checking whether each option has multiple values or not.
+
+So if there is an account with name bob, even the following will work:
+./atm -a bob lol  -w 23.23 45.32
