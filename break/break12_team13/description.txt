@@ -1,0 +1,1 @@
+They are not using the supplied auth file. So it doesn’t matter whatever we pass with -s option, it just runs the command.
