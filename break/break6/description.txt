@@ -1,0 +1,4 @@
+They handled the case when auth file is not present. But they did not handle the case when auth file is a bad file. For e.g. passing card file as an auth file.
+And hence the program crashes with exit code 1.
+
+At line 195 of Atm.java, they are just checking if (key==null) but not checking if the key is not null but a wrong file like a cardfile.
