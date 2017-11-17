@@ -1,0 +1,4 @@
+Their to_filename method isn’t checking whether filename exits or not.
+So when some garbage is passed as authfile name , it throws error 63 instead of 255 even when that file doesn’t exist in the first place.
+
+So the last input in test.json will exit with 63 when it should exit with 255.
