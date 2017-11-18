@@ -1,0 +1,5 @@
+The implementation is vulnerable to replay attacks since it just
+uses a regular symmetric encryption cipher. There is no way of telling
+whether a message is just a repeat of an earlier message so the attacker
+can just continue to send the same message over and over and get the
+bank to act on it.
