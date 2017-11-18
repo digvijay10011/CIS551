@@ -1,0 +1,7 @@
+{
+    "type": "correctness",
+    "target_team": 12,
+    "inputs": [ {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-n", "10.20"],"base64":false}, 
+    	{"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-n", "10.20", "-c", "alice.card"],"base64":false},
+    	 {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "alice", "-n", "10.20", "-c", "alice.card"],"base64":false}]
+}

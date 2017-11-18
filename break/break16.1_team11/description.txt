@@ -1,0 +1,3 @@
+Atm seems to never exit with code 63 even when there is protocol error.
+The entire socket thing in Atm.java is wrapped with with try/catch which exists with 255 when some exception is thrown, no matter if the exception was thrown due to protocol error.
+In our test case, wrong IP address should ideally result in exiting with 63 but it exits with code 255.
