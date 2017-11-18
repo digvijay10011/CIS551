@@ -1,0 +1,6 @@
+The implementation is vulnerable to replay attacks since it just
+uses a regular symmetric encryption cipher.
+Although there is an attempt to remedy this by using a random
+value for each message, it appears that in the newRandom function
+the number is checked for membership in the list as a string and then 
+if new added to the list as a number so the check of membership always fails.
