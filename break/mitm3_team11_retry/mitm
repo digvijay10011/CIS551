@@ -91,13 +91,15 @@ def mitm(buff, direction, shared):
       # log("hb is bad? " + ("yes" if hb == bad else "no"))
       if hb == good:
         amount += curr
-      if hb == bad and curr == 1:
+      if hb == bad and curr <= 1:
         curr = 0
         finish()
       else:
         #curr = round(curr/2, 2)
-        if curr != 1:
+        if curr > 1:
          curr = curr/2
+        else:
+         finish()
         log("amount: " + str(amount))
         log("new curr: " + str(curr))
         subtract()
