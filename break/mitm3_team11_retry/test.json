@@ -1,0 +1,9 @@
+{
+    "type": "confidentiality",
+    "target_team": 11,
+    "inputs": [
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-n", "%AMOUNT%"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-n", "501.00"],"base64":false}, 
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-w", "1000.00"],"base64":false}
+    ], "mitm": "mitm"
+}

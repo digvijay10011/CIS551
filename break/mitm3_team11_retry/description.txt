@@ -1,0 +1,10 @@
+We can determine how much money is in an account because the bank will send the
+same response when a command is valid and a different response when a command is
+invalid, every time.
+First we send a valid atm command to determine what the good message is
+and then we send an invalid atm command to determine what the bad message is.
+Then we attempt to withdraw a certain amount of money, and we check if the
+withdrawl succeeded or failed. We start with the maximum amount of money, and
+we reduce our withdrawl amounts by half each iteration, until we get to $0.01.
+We sum up all of the successful withdrawls, and when we can't withdraw another
+cent, we know we have the secret amount.
