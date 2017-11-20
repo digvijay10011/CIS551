@@ -1,0 +1,37 @@
+{
+    "type": "confidentiality",
+    "target_team": 4,
+    "inputs": [
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-n", "%AMOUNT%"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "268435456.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "134217728.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "67108864.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "33554432.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "16777216.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "8388608.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "4194304.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "2097152.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "1048576.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "524288.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "262144.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "131072.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "65536.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "32768.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "16384.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "8192.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "4096.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "2048.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "1024.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "512.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "256.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "128.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "64.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "32.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "16.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "8.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "4.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "2.00"],"base64":false},
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "%ACCOUNT%", "-w", "1.00"],"base64":false}
+
+    ], "mitm": "mitm"
+}
