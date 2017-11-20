@@ -1,0 +1,6 @@
+The randomness for generating the authfile is insufficient. It is just seeded with the 
+current time and it is relatively for an attacker to get close to this value, in this case
+the mitm is running on the same system so it is relatively easy to get a good estimate
+of what this seed was, then it can simply take the first message it sees and brute force
+the key by trying times around the time it thinks the original key was created until
+it gets a match. At this point the attacker can do whatever she pleases.

@@ -1,0 +1,30 @@
+{
+    "type": "integrity",
+    "target_team": 4,
+    "inputs": [
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-n", "19.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false}
+    ]
+}
