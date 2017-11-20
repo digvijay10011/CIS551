@@ -9,3 +9,4 @@ we reduce our withdrawl amounts by half each iteration, until we get to $0.01.
 We sum up all of the successful withdrawls, and when we can't withdraw another
 cent, we know we have the secret amount.
 
+
