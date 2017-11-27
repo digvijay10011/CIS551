@@ -1,0 +1,15 @@
+{
+    "type": "integrity",
+    "target_team": 13,
+    "inputs": [
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-n", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false},
+        {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.00"],"base64":false}
+    ]
+}

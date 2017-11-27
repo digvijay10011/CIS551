@@ -1,0 +1,4 @@
+The bank does not print protocol error and the atm does not exit with the correct  error if the man 
+in the middle inserts random garbage into the conversation so neither end knows if something fishy is 
+going on. This makes it easier for the attacker to try a variety of approaches when attacking,
+including by corrupting certain transactions.
