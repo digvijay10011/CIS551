@@ -1,0 +1,4 @@
+The implementation is vulnerable to replay attacks. Although the messages 
+are authenticated, there is no way of checking to see whether a message
+has already been seen, so old messages are accepted allowing an attacker 
+to resend messages that one side or the other didn't intend.

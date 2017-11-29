@@ -1,0 +1,12 @@
+{
+    "type": "integrity",
+    "target_team": 6,
+    "inputs": [
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-n", "10.20"],"base64":false}, 
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "10.20"],"base64":false}, 
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "11.20"],"base64":false}, 
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "12.20"],"base64":false}, 
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-d", "13.20"],"base64":false}, 
+         {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-w", "10.20"],"base64":false}
+    ], "mitm": "mitm"
+}
