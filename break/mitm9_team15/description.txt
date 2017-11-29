@@ -1,0 +1,11 @@
+We can determine how much money is in an account because the bank will send 
+a response with a specific length when a command is valid and a response with different length when a command is
+invalid.
+They used SSL, and hence for each transaction, multiple messages were exchanged but still when the transaction fails, messages of specific length were sent.
+First we send a valid atm command to determine what the good message length is
+and then we send an invalid atm command to determine what the bad message length is.
+Then we attempt to withdraw a certain amount of money, and we check if the
+withdrawl succeeded or failed. We start with the maximum amount of money, and
+we reduce our withdrawl amounts by half each iteration, until we get to $0.
+We sum up all of the successful withdrawls, and when we can't withdraw another
+cent, we know we have the secret amount.
