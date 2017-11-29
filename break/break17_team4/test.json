@@ -1,0 +1,5 @@
+{
+    "type": "correctness",
+    "target_team": 4,
+    "inputs": [ {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-n", "10.00"],"base64":false}, {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-w", "9.99"],"base64":false}, {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-w", "0.01"],"base64":false}, {"input":["-p", "%PORT%", "-i", "%IP%", "-a", "bob", "-g"],"base64":false} ]
+}

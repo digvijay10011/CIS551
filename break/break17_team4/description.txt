@@ -1,0 +1,2 @@
+They are using   abs(thisAccount[1] - modeArg) < 0.0001  before withdrawing.
+So the balance may become negative, though very close to zero but negative.
