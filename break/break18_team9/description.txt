@@ -1,0 +1,7 @@
+They are using following code to validate port numbers.
+
+if (portNumber <= 1024 || portNumber >= 65535)
+	return false;
+
+But port numbers, 1024 and 65535 should be allowed as per specification.
+Hence, their code throws error 255 instead of 63 when either 1024 or 65535 is passed as port number.
