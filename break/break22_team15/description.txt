@@ -1,0 +1,2 @@
+In parseCliArgs method in Atm.java, they are returning a json object containing all the parsed arguments. But if just “./atm -a bob” is passed without any additional arguments, the son returned by that method will be null and hence null pointer exception is thrown and the program crashes with exit code 1 instead of exiting with code 255..
+Moreover, they are doing some communication with bank before this and hence bank prints protocol_error which is not at all needed.

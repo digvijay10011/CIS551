@@ -1,0 +1,2 @@
+They haven’t handled the case when -n is passed as the account name. Their program takes -n as an option no matter where it is placed.
+Hence for ./atm -a -n -n 12.12. their program exits with 255 even though -n is perfectly fine as account name.
