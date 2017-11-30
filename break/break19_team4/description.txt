@@ -1,0 +1,3 @@
+No where before comparing mode == ’n’ (at around line 266 of atm), they are checking whether mode has actually been assigned or not.
+So when we run the atm without any mode such as “./atm -a bob”,
+The atm crashes with exit code 1.
