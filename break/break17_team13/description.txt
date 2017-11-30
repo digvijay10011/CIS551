@@ -1,0 +1,2 @@
+Whenever -g is present in the arguments, they check if the number of arguments are even or not. If they are even, they throw error.
+So whenever -ga is passed, they throw an error which is against the specification.
