@@ -1,0 +1,3 @@
+We manually check if any of the input arguments contains an equals sign because
+our library will parse that as a correct argument. If there is an equals sign
+that must mean that the input is malformed so we exit with code 255.
