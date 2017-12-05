@@ -29,7 +29,7 @@ class Validator {
             return false;
         }
 
-        String[] parts = ipAddress.split("\\.");
+        String[] parts = ipAddress.split("\\.",-1);
         if (parts.length != 4) {
             return false;
         }
