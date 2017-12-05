@@ -1,0 +1,4 @@
+In Validator.java, we were using the split() method on string to split the IP address.
+But the split() method drops the trailing null strings.
+So 127.0.0.1. will be split into just 4 parts instead of 5
+So we used another version of split() method which takes an additional argument to not drop the trailing null strings.
