@@ -1,0 +1,1 @@
+We put an upper limit on the account name length but there was no lower limit. So putting a lower limit for the length of account name fixed this bug.
