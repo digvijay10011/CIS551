@@ -59,7 +59,7 @@ class Validator {
                 return false;
             }
         }
-        return account != null && account.length() <= 200;
+        return account != null && account.length() <= 200 && account.length() > 0;
     }
 
     static boolean validateNumber(String num) {
