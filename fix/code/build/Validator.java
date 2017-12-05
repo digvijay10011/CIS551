@@ -72,7 +72,7 @@ class Validator {
                 return false;
             }
 
-            if (n == 0) {
+            if (n == 0 && num.length() == 1) {
                 return true;
             }
         } catch(NumberFormatException e) {
