@@ -118,4 +118,16 @@ class Validator {
         return validateNumber(parts[0]) &&
                 validateLeadingZeroNumber(parts[1]);
     }
+
+    static boolean validateEquals(String[] args) {
+        if (args == null) {
+            return false;
+        }
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].indexOf('=') > -1) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

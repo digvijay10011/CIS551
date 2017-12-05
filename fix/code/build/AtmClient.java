@@ -87,6 +87,10 @@ class AtmClient {
         optionGroup.setRequired(true);
         options.addOptionGroup(optionGroup);
 
+        if (!Validator.validateEquals(args)) {
+            ArgumentParser.printInvalidArgs(options);
+        }
+
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
 
