@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#export my_dir=$( dirname "${BASH_SOURCE[0]}" )
+
+#trap 'finish' SIGINT SIGTERM
+# trap 'echo hello; exit' SIGINT SIGTERM
+
+#finish()
+#{
+#processId='ps -ef | grep ''BankServer'' | grep -v ''grep'' | awk ''{ printf $2 }\'''
+#echo $processId
+#kill $processId
+#}
+export my_dir=/home/builder/submission/fix/code/build
+#export my_dir=/Users/digvijaychauhan/Documents/cis551_new/CIS551/fix/code
+exec java -cp .:$my_dir:$my_dir/* BankServer "$@"
