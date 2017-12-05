@@ -1,0 +1,4 @@
+We are using Integer.valueOf() method to parse port numbers.
+Both the breaks were passing some value such that it cannot be parsed by this method.(break 580 has an extra space and break 54 is a flaot and not integer)
+Hence above method was throwing NumberFormatException and we didn't handle that exception.
+We wrapped that call with try/catch block and hence the issue got solved.
