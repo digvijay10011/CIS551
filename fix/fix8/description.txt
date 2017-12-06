@@ -1,0 +1,2 @@
+Upon successful transaction, we were passing account, amount and error code in the response. But upon failed transaction, we were just sending account and error code. Hence, team 10 exploited our code using these difference in response length. So we now send the amount even in the failed case. Also before we were passing “true” and “false” for error code which leads to a difference of 1 byte. Now, we are sending 1 and 0 as error codes.
+So now, there is no way to differentiate between successful and unsuccessful transactions.
