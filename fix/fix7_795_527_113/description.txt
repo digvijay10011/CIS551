@@ -1,0 +1,5 @@
+There was a bug when considering -- as an option. It would be considered a valid
+input by our command line parser but would not emit a value for it nor would it
+fail. Therefore, we added a manual check that determines whether it is used as
+a value or whether it is extraneous and should exit the program with exit code
+255.
