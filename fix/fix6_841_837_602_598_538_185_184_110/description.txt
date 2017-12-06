@@ -1,0 +1,9 @@
+The bug was that, if an option value had a hyphen as the first character,
+it was treated as an option rather than as a value.
+This resulted in the atm rejecting valid input commands,
+such as `./atm -a -c -c -c -n 100.00` or `./atm -a -c -gc -c`, where "-c" is the
+account name and also the name of the card file.
+To fix it, we manually check if a hyphened value exists, and then remove the
+hyphen temporarily for the parsing, and then add the hyphen back in.
+Note that the same team often submitted two bug reports on this, but we don't
+know if that counts as 2 different bugs.
