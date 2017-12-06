@@ -10,6 +10,8 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -91,6 +93,26 @@ class AtmClient {
             ArgumentParser.printInvalidArgs(options);
         }
 
+        Set<String> replacedArgs = new HashSet<String>();
+        for (int i = 0; i < args.length - 1; i++) {
+            if (args[i].equals("-a") || args[i].equals("-c") ||
+                args[i].equals("-s") || args[i].equals("-gs") ||
+                args[i].equals("-ga") || args[i].equals("-gc")) {
+                if (args[i+1].length() >=2) {
+                    if (args[i+1].substring(0, 2).equals("-a") || args[i+1].substring(0, 2).equals("-ga") ||
+                        args[i+1].substring(0, 2).equals("-s") || args[i+1].substring(0, 2).equals("-gs") ||
+                        args[i+1].substring(0, 2).equals("-i") || args[i+1].substring(0, 2).equals("-gi") ||
+                        args[i+1].substring(0, 2).equals("-p") || args[i+1].substring(0, 2).equals("-gp") ||
+                        args[i+1].substring(0, 2).equals("-c") || args[i+1].substring(0, 2).equals("-gc") ||
+                        args[i+1].substring(0, 2).equals("-n") || args[i+1].substring(0, 2).equals("-d") ||
+                        args[i+1].substring(0, 2).equals("-w") || args[i+1].substring(0, 2).equals("-g")) {
+                        args[i+1] = args[i+1].replace("-", "");
+                        replacedArgs.add(args[i]);
+                    }
+                }
+            }
+        }
+
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = null;
 
@@ -109,10 +131,16 @@ class AtmClient {
         }
 
         String account = ArgumentParser.getOptionValue(cmd, 'a', "");
+        if (replacedArgs.contains("-a") || replacedArgs.contains("-ga")) {
+            account = "-" + account;
+        }
         if (!Validator.validateAccountName(account)) {
             ArgumentParser.printInvalidArgs(options);
         }
         String authFile = ArgumentParser.getOptionValue(cmd, 's', "bank.auth");
+        if (replacedArgs.contains("-s") || replacedArgs.contains("-gs")) {
+            authFile = "-" + authFile;
+        }
         if (!Validator.validateFileName(authFile)) {
             ArgumentParser.printInvalidArgs(options);
         }
@@ -133,6 +161,9 @@ class AtmClient {
             ArgumentParser.printInvalidArgs(options);
         }
         String cardFile = ArgumentParser.getOptionValue(cmd, 'c', account + ".card");
+        if (replacedArgs.contains("-c") || replacedArgs.contains("-gc")) {
+            cardFile = "-" + cardFile;
+        }
         if (!Validator.validateFileName(cardFile)) {
             ArgumentParser.printInvalidArgs(options);
         }
@@ -186,7 +217,7 @@ class AtmClient {
             createCardFile(cardFile);
             cardFileCreated = true;
         }
-        
+
         cardFileContent = readCardFile(cardFile);
         
         SSLSocketFactory ssf = null;
