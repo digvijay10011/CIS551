@@ -105,8 +105,9 @@ class AtmClient {
                         args[i+1].substring(0, 2).equals("-p") || args[i+1].substring(0, 2).equals("-gp") ||
                         args[i+1].substring(0, 2).equals("-c") || args[i+1].substring(0, 2).equals("-gc") ||
                         args[i+1].substring(0, 2).equals("-n") || args[i+1].substring(0, 2).equals("-d") ||
-                        args[i+1].substring(0, 2).equals("-w") || args[i+1].substring(0, 2).equals("-g")) {
-                        args[i+1] = args[i+1].replace("-", "");
+                        args[i+1].substring(0, 2).equals("-w") || args[i+1].substring(0, 2).equals("-g") ||
+                        args[i+1].substring(0, 2).equals("--")) {
+                        args[i+1] = args[i+1].substring(1);
                         replacedArgs.add(args[i]);
                     }
                 }
@@ -121,6 +122,15 @@ class AtmClient {
         } catch (Exception e) {
             ArgumentParser.printInvalidArgs(options);
         } 
+
+        if (args.length >= 2) {
+            if (!(args[args.length-2].equals("-a") || args[args.length-2].equals("-ga") ||
+            args[args.length-2].equals("-c") || args[args.length-2].equals("-gc") ||
+            args[args.length-2].equals("-s") || args[args.length-2].equals("-gs") 
+            ) && args[args.length-1].equals("--")) {
+                ArgumentParser.printInvalidArgs(options);
+            }
+        }
 
         if (cmd.getArgs().length > 0) {
             ArgumentParser.printInvalidArgs(options);
