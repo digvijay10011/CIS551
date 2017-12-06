@@ -326,9 +326,9 @@ class AtmClient {
             JsonObject responseObject = jsonReader.readObject();
             jsonReader.close();
 
-            boolean error = responseObject.getBoolean("error");
+            int error = responseObject.getInt("error");
 
-            if (error) {
+            if (error == 1) {
                 if(cardFileCreated){
                     File f = new File(cardFile);
                     if(f.exists())

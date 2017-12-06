@@ -193,6 +193,7 @@ class BankServer {
                         jsonBuilder.add("initial_balance", requestedAmount);
                         break;
                     case 'w':
+                        jsonBuilder.add("withdraw", requestedAmount);
                         account = allAccounts.get(requestedAccount);
                         if (account == null) {
                             error = true;
@@ -209,7 +210,7 @@ class BankServer {
                             break;
                         }
                         account.bigbalance = account.bigbalance.subtract(temp);
-                        jsonBuilder.add("withdraw", requestedAmount);
+                        
                         break;
                     case 'd':
                         account = allAccounts.get(requestedAccount);
@@ -238,10 +239,10 @@ class BankServer {
                 }
                 
                 if(error){
-                    response = jsonBuilder.add("error", true).build();
+                    response = jsonBuilder.add("error", 1).build();
                 }
                 else{
-                    response = jsonBuilder.add("error", false).build();
+                    response = jsonBuilder.add("error", 0).build();
                     System.out.println(Json.createObjectBuilder(response).remove("error").build().toString());
                     System.out.flush();
                 }
