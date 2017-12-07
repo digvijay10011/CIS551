@@ -1,0 +1,80 @@
+# Briefly describe the individual contributions of each member of the team for
+# each of the three project phases.
+
+BUILD IT
+* Arjun: Build command line argument parser and validator for command line arguments
+* George: wrote code for secure communication between atm/bank
+* Digvijay: wrote code for transactions and card file handling.
+
+
+BREAK IT
+* Arjun: Built out framework for binary search MITM confidentiality exploits.
+* George: initial work getting MITM working, wrote replay attacks, thought of binary search attack, implemented the key guessing attack
+* Digvijay: Modified and carried out confidentiality attacks on teams that were using SSL or Https.  Found correctness bugs.
+
+
+FIX IT
+* Arjun: Fix bugs that have to do with parsing command line arguments
+* George: helped think through bug fixes, initial collation of bugs against us
+* Digvijay: Fixed the confidentiality exploit and other bugs not related to parsing.
+
+
+
+
+
+
+
+
+# Briefly describe the most interesting break found against your submission.
+# Make sure to include the team and bug name.
+
+
+The most interesting bug against our team was submission 274 by team 10. We were vulnerable because we were sending different length messages from the bank to the atm for successful withdrawals and for unsuccessful ones. This allowed them to do binary search to figure out the value in a secret account. We realized that we were vulnerable to this during the break-it phase when we thought to do it against other teams.
+
+
+
+
+
+
+
+
+# Briefly describe the most interesting break that your team found against
+# another team's submission. Make sure to include the team and bug name.
+
+
+The most interesting exploit that we found was submission 583 against team 4. They were just using the current time to seed the random number generator to generate the key in their authfile. Since the mitm was running on the same machine soon after their bank code we were able to brute force the key by sequentially guessing times in the recent past, using those times for seeds to the random number generator and then checking to see whether the decryption with that key was gibberish or whether it matched their syntax. Upon success we had their secret key and could completely break their communication.
+
+
+
+
+
+
+
+
+
+
+Bugs that were not submitted :
+
+
+* Team 12 did not follow the specification. They were modifying the card file after every transaction. 
+One of the main parts of this project was to do authentication based on just one shared auth file. They stored sequence numbers in cardfiles and updated them after every transaction and used that to prevent mitm attack.
+Also, due to changing cardfile, we can not do confidentiality attack that guesses the card file contents.
+To check this, just create an account and carry out some transactions for the same account. After every transaction, look at the sequence number field in the card file, it will have incremented or decremented.
+
+
+* Team 9 did not follow the specification with regards to the bank. The following command: `./bank -sp 8080` runs successfully. It should not run because there is no authfile specified by the -s flag.
+
+
+* Team 11 did not follow the specification with regards to the bank. The following command: `./bank -sp 8080` runs successfully. It should not run because there is no authfile specified by the -s flag.
+
+
+* Team 13 is using double to store the balance. You can check that at line 7 of BankRecord.java. We were not able to submit that because we reached the bug limit and also command server would have timed out if we try to overflow that. A better alternative was to use BigDecimal.
+
+
+* Team 6 isn’t creating cardfiles. So there is no way for us to attempt confidentiality attack that guesses the card file contents because the command server would just not find the card file.
+
+
+* Team 4 is also vulnerable to binary search based attack. But instead of that we did a more powerful attack that bruteforced their key. And so we were not able to submit another confidentiality attack. The code that does this binary search based attack is in the mitm4_team4_rtry7 directory inside the break directory on our GitHub.
+
+
+* Team 6 is also using double to store the balance. You can check that at line 5 of Account.java inside the json directory. We were not able to submit that because command server would have timed out if we try to overflow that. A better alternative was to use BigDecimal.
