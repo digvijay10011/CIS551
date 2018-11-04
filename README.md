@@ -1,5 +1,5 @@
 # CIS551
-Build it, Break it, Fix it
+[Build it, Break it, Fix it](https://arxiv.org/abs/1606.01881)
 
 Course project for CIS 551 Computer and Network Security. </br>
 </br>
@@ -13,4 +13,4 @@ There were three phases: </br>
 [break](break) directory contains the code and information for the exploits we carried out against other teams. Inside the break directory, the subdirectories starting with **mitm** conatin the info about man in the middle attacks. Each subdirectory also has a description.txt file that explains what that attack does. </br>
 [fix](fix) directory contain our fixes. </br>
 </br>
-[writeup.txt](writeup.txt) contain a brief summary of what we did and the interesting bugs we found as well as the bugs found against us.
+[writeup.txt](writeup.txt) contains a brief summary of what we did and the interesting bugs we found as well as the bugs found against us.
