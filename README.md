@@ -1,7 +1,7 @@
 # CIS551
 Build it, Break it, Fix it
 
-Course project for CIS 551 Computer and Network Security.
+Course project for CIS 551 Computer and Network Security. </br>
 </br>
 There were three phases: </br>
 **Build it :** Build a secure client server system. </br>
