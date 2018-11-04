@@ -10,7 +10,7 @@ There were three phases: </br>
 </br>
 </br>
 [build](build) directory contains the code for our system. </br>
-[break](break) directory contains the code and information for the exploits we carried out against other teams. Inside the break directory, the subdirectories starting with 'mitm' conatin the info about man in the middle attacks. </br>
-[fix](fix) directory contain our fixes. </br>
+[break](break) directory contains the code and information for the exploits we carried out against other teams. Inside the break directory, the subdirectories starting with **mitm** conatin the info about man in the middle attacks. </br>
+[fix](fix) directory contain our fixes. Each subdirectory also has a description.txt file that explains what that attack does. </br>
 </br>
 [writeup.txt](writeup.txt) contain a brief summary of what we did and the interesting bugs we found as well as the bugs found against us.
